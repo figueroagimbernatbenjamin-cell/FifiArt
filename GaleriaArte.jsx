@@ -1,16 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { MessageCircle, X, Send, ArrowUpRight, Ruler } from "lucide-react";
-
-/* ------------------------------------------------------------------ */
-/*  Datos                                                              */
-/* ------------------------------------------------------------------ */
+import { X, Send, ArrowUpRight, Ruler, ArrowLeft, ArrowRight } from "lucide-react";
 
 const CATEGORIES = ["Todos", "Abstracto", "Botánico", "Óleo", "Textura Minimalista"];
 
-/* Genera una imagen de relleno tipo "mancha abstracta" en SVG, sin depender
-   de ningún servicio externo (así siempre se ve algo, incluso sin internet).
-   Cuando tengas tus fotos reales, agregá "image: 'tu-url'" a cada obra y esto
-   deja de usarse automáticamente. */
 function hashSeed(str) {
   let h = 0;
   for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
@@ -30,21 +22,136 @@ function placeholderArt(seed, w = 700, h = 900) {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
-/* Para usar tus propias fotos: agregá "image: 'https://tu-url-o-ruta.jpg'" a cada
-   obra. Si no está presente, se usa una imagen de relleno generada con "seed". */
+function buildArtworkImages(seed, tall, primaryImage = null, count = 3) {
+  const list = primaryImage ? [primaryImage] : [];
+  while (list.length < count) {
+    list.push(placeholderArt(`${seed}-${list.length + 1}`, 700, tall ? 900 : 700));
+  }
+  return list;
+}
+
 const ARTWORKS = [
-  { id: 1, title: "Marea de Ocre", category: "Abstracto", size: "100x140 cm — Marco de Roble", price: "$185.000", seed: "marea-ocre", tall: true },
-  { id: 2, title: "Follaje Suspendido", category: "Botánico", size: "60x80 cm — Marco de Nogal", price: "$96.000", seed: "follaje-suspendido" },
-  { id: 3, title: "Veta de Sombra", category: "Óleo", size: "90x120 cm — Sin Marco", price: "$210.000", seed: "veta-sombra", tall: true },
-  { id: 4, title: "Lino Crudo", category: "Textura Minimalista", size: "70x70 cm — Marco Flotante", price: "$78.000", seed: "lino-crudo" },
-  { id: 5, title: "Bruma de Sena", category: "Abstracto", size: "80x100 cm — Marco de Roble", price: "$142.000", seed: "bruma-sena" },
-  { id: 6, title: "Jardín Cerrado", category: "Botánico", size: "100x100 cm — Marco de Nogal", price: "$168.000", seed: "jardin-cerrado", tall: true },
-  { id: 7, title: "Capas de Óxido", category: "Óleo", size: "60x90 cm — Sin Marco", price: "$124.000", seed: "capas-oxido" },
-  { id: 8, title: "Arena en Reposo", category: "Textura Minimalista", size: "80x80 cm — Marco Flotante", price: "$89.000", seed: "arena-reposo" },
-  { id: 9, title: "Corriente Índigo", category: "Abstracto", size: "110x140 cm — Marco de Roble", price: "$198.000", seed: "corriente-indigo", tall: true },
-  { id: 10, title: "Hoja de Musgo", category: "Botánico", size: "50x70 cm — Marco de Nogal", price: "$72.000", seed: "hoja-musgo" },
-  { id: 11, title: "Pigmento Crudo", category: "Óleo", size: "100x130 cm — Sin Marco", price: "$220.000", seed: "pigmento-crudo", tall: true },
-  { id: 12, title: "Piedra Pulida", category: "Textura Minimalista", size: "60x60 cm — Marco Flotante", price: "$64.000", seed: "piedra-pulida" },
+  {
+    id: 1,
+    title: "Cuadro 1",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-1",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-1.avif",
+    images: buildArtworkImages("cuadro-1", false, "https://user35230.na.imgto.link/public/20260922/cuadro-1.avif", 3),
+  },
+  {
+    id: 2,
+    title: "Cuadro 2",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-2",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-2.avif",
+    images: buildArtworkImages("cuadro-2", false, "https://user35230.na.imgto.link/public/20260922/cuadro-2.avif", 3),
+  },
+  {
+    id: 3,
+    title: "Cuadro 3",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-3",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-3.avif",
+    images: buildArtworkImages("cuadro-3", false, "https://user35230.na.imgto.link/public/20260922/cuadro-3.avif", 3),
+  },
+  {
+    id: 4,
+    title: "Cuadro 4",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-4",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-4.avif",
+    images: buildArtworkImages("cuadro-4", false, "https://user35230.na.imgto.link/public/20260922/cuadro-4.avif", 3),
+  },
+  {
+    id: 5,
+    title: "Cuadro 5",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-5",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-5.avif",
+    images: buildArtworkImages("cuadro-5", false, "https://user35230.na.imgto.link/public/20260922/cuadro-5.avif", 3),
+  },
+  {
+    id: 6,
+    title: "Cuadro 6",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-6",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-6-mejorado.avif",
+    images: buildArtworkImages("cuadro-6", false, "https://user35230.na.imgto.link/public/20260922/cuadro-6-mejorado.avif", 3),
+  },
+  {
+    id: 7,
+    title: "Cuadro 7",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-7",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-7-mejorado.avif",
+    images: buildArtworkImages("cuadro-7", false, "https://user35230.na.imgto.link/public/20260922/cuadro-7-mejorado.avif", 3),
+  },
+  {
+    id: 8,
+    title: "Cuadro 8",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-8",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-8.avif",
+    images: buildArtworkImages("cuadro-8", false, "https://user35230.na.imgto.link/public/20260922/cuadro-8.avif", 3),
+  },
+  {
+    id: 9,
+    title: "Cuadro 9",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-9",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-9.avif",
+    images: buildArtworkImages("cuadro-9", false, "https://user35230.na.imgto.link/public/20260922/cuadro-9.avif", 3),
+  },
+  {
+    id: 10,
+    title: "Cuadro 10",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-10",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-10.avif",
+    images: buildArtworkImages("cuadro-10", false, "https://user35230.na.imgto.link/public/20260922/cuadro-10.avif", 3),
+  },
+  {
+    id: 11,
+    title: "Cuadro 11",
+    category: "Abstracto",
+    size: "80 x 100 cm — Sin Marco",
+    price: "$135.000",
+    seed: "cuadro-11",
+    tall: false,
+    image: "https://user35230.na.imgto.link/public/20260922/cuadro-11.avif",
+    images: buildArtworkImages("cuadro-11", false, "https://user35230.na.imgto.link/public/20260922/cuadro-11.avif", 3),
+  }
 ];
 
 const WHATSAPP_NUMBER = "5492645059194";
@@ -80,10 +187,6 @@ function openWhatsApp(text = "Hola! Vi la galería online y quisiera hacer una c
   }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Hook: revela un elemento cuando entra en viewport                  */
-/* ------------------------------------------------------------------ */
-
 function useReveal() {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -92,16 +195,12 @@ function useReveal() {
     const node = ref.current;
     if (!node) return;
 
-    // Red de seguridad: si por algún motivo el navegador no dispara el
-    // IntersectionObserver (pasa en algunos navegadores/apps móviles),
-    // igual mostramos el contenido para que nunca quede invisible.
     if (typeof IntersectionObserver === "undefined") {
       setVisible(true);
       return;
     }
 
     const fallback = setTimeout(() => setVisible(true), 1200);
-
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -122,11 +221,7 @@ function useReveal() {
   return [ref, visible];
 }
 
-/* ------------------------------------------------------------------ */
-/*  Tarjeta de obra con tilt 3D                                        */
-/* ------------------------------------------------------------------ */
-
-function ArtCard({ art, index }) {
+function ArtCard({ art, index, onOpenGallery }) {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
@@ -141,53 +236,38 @@ function ArtCard({ art, index }) {
     setTilt({ x: py * -10, y: px * 12 });
   }, []);
 
-  const handleMove = useCallback(
-    (e) => applyTiltFromPoint(e.clientX, e.clientY),
-    [applyTiltFromPoint]
-  );
-
-  const handleTouchStart = useCallback(
-    (e) => {
-      setHovered(true);
-      const t = e.touches[0];
-      if (t) applyTiltFromPoint(t.clientX, t.clientY);
-    },
-    [applyTiltFromPoint]
-  );
-
-  const handleTouchMove = useCallback(
-    (e) => {
-      const t = e.touches[0];
-      if (t) applyTiltFromPoint(t.clientX, t.clientY);
-    },
-    [applyTiltFromPoint]
-  );
-
+  const handleMove = useCallback((e) => applyTiltFromPoint(e.clientX, e.clientY), [applyTiltFromPoint]);
+  const handleTouchStart = useCallback((e) => {
+    setHovered(true);
+    const t = e.touches[0];
+    if (t) applyTiltFromPoint(t.clientX, t.clientY);
+  }, [applyTiltFromPoint]);
+  const handleTouchMove = useCallback((e) => {
+    const t = e.touches[0];
+    if (t) applyTiltFromPoint(t.clientX, t.clientY);
+  }, [applyTiltFromPoint]);
   const reset = useCallback(() => {
     setTilt({ x: 0, y: 0 });
     setHovered(false);
   }, []);
 
-  const fallbackArt = useMemo(
-    () => placeholderArt(art.seed, 700, art.tall ? 900 : 700),
-    [art.seed, art.tall]
-  );
-
-  const handleImageError = useCallback(
-    (event) => {
-      if (event.currentTarget.src !== fallbackArt) {
-        event.currentTarget.src = fallbackArt;
-      }
-    },
-    [fallbackArt]
-  );
+  const fallbackArt = useMemo(() => placeholderArt(art.seed, 700, art.tall ? 900 : 700), [art.seed, art.tall]);
+  const galleryImages = useMemo(() => art.images && art.images.length ? art.images : [art.image || fallbackArt], [art.images, art.image, fallbackArt]);
+  const handleImageError = useCallback((event) => {
+    if (event.currentTarget.src !== fallbackArt) {
+      event.currentTarget.src = fallbackArt;
+    }
+  }, [fallbackArt]);
 
   const waMessage = `Hola, me interesa la obra "${art.title}" (${art.size}). ¿Me pasás precio y disponibilidad?`;
 
   return (
     <div
       className={`art-card ${art.tall ? "art-card--tall" : ""}`}
-      style={{ animationDelay: `${(index % 6) * 90}ms` }}
+      style={{
+        animationDelay: `${(index % 6) * 120}ms`,
+        '--card-delay': `${(index % 6) * 120}ms`,
+      }}
     >
       <div className="art-card__media">
         <div
@@ -200,14 +280,22 @@ function ArtCard({ art, index }) {
           onTouchMove={handleTouchMove}
           onTouchEnd={reset}
           onTouchCancel={reset}
+          onClick={() => onOpenGallery(galleryImages, 0)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onOpenGallery(galleryImages, 0);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label={`Ver más fotos de ${art.title}`}
           style={{
-            transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${
-              hovered ? 1.02 : 1
-            })`,
+            transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${hovered ? 1.02 : 1})`,
           }}
         >
           <img
-            src={art.image || fallbackArt}
+            src={galleryImages[0] || fallbackArt}
             alt={art.title}
             className={`art-card__img ${imgLoaded ? "art-card__img--loaded" : ""}`}
             loading="lazy"
@@ -217,13 +305,13 @@ function ArtCard({ art, index }) {
           <div className="art-card__sheen" style={{ opacity: hovered ? 1 : 0 }} />
         </div>
 
-        {/* Fuera del recuadro con tilt/overflow para que el toque siempre funcione */}
         <a
           href={buildWhatsAppUrl(waMessage)}
           target="_blank"
           rel="noreferrer noopener"
           onClick={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             openWhatsApp(waMessage);
           }}
           className="art-card__quick-wa"
@@ -245,10 +333,6 @@ function ArtCard({ art, index }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Icono WhatsApp (SVG propio, más fiel que un icon set genérico)     */
-/* ------------------------------------------------------------------ */
-
 function WhatsAppIcon({ size = 24 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -257,10 +341,6 @@ function WhatsAppIcon({ size = 24 }) {
     </svg>
   );
 }
-
-/* ------------------------------------------------------------------ */
-/*  Ventana de chat flotante                                           */
-/* ------------------------------------------------------------------ */
 
 function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -276,11 +356,7 @@ function ChatWidget() {
             <p className="chat-widget__name">Atención de Galería</p>
             <p className="chat-widget__status">En línea · responde rápido</p>
           </div>
-          <button
-            className="chat-widget__close"
-            onClick={() => setOpen(false)}
-            aria-label="Cerrar chat"
-          >
+          <button className="chat-widget__close" onClick={() => setOpen(false)} aria-label="Cerrar chat">
             <X size={18} />
           </button>
         </div>
@@ -311,10 +387,6 @@ function ChatWidget() {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Sección con reveal en scroll                                       */
-/* ------------------------------------------------------------------ */
-
 function Reveal({ children, className = "" }) {
   const [ref, visible] = useReveal();
   return (
@@ -324,13 +396,17 @@ function Reveal({ children, className = "" }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Componente principal                                               */
-/* ------------------------------------------------------------------ */
-
-export default function GaleriaArte() {
+export default function App() {
   const [activeCategory, setActiveCategory] = useState("Todos");
+  const [studioIndex, setStudioIndex] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const [galleryImages, setGalleryImages] = useState([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [galleryScale, setGalleryScale] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const zoomTimerRef = useRef(null);
+  const dragStartRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     document.title = "FIFI | Galería de Arte";
@@ -341,20 +417,93 @@ export default function GaleriaArte() {
     return () => clearTimeout(t);
   }, []);
 
-  const heroImage = useMemo(() => placeholderArt("hero-fifi", 900, 1100), []);
+  useEffect(() => {
+    if (!galleryImages.length) return;
 
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setGalleryImages([]);
+        setSelectedImageIndex(0);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [galleryImages]);
+
+  const heroImage = useMemo(
+    () => "https://user35230.na.imgto.link/public/20260922/fifi-4x5-transparente.avif",
+    []
+  );
   const filtered = useMemo(
-    () =>
-      activeCategory === "Todos"
-        ? ARTWORKS
-        : ARTWORKS.filter((a) => a.category === activeCategory),
+    () => activeCategory === "Todos" ? ARTWORKS : ARTWORKS.filter((a) => a.category === activeCategory),
     [activeCategory]
   );
+  const studioWorks = useMemo(() => ARTWORKS, []);
+  const moveStudio = useCallback((direction) => {
+    setStudioIndex((prev) => (prev + direction + studioWorks.length) % studioWorks.length);
+  }, [studioWorks.length]);
 
   const handleCategoryClick = useCallback((category) => setActiveCategory(category), []);
+  const openArtworkGallery = useCallback((images, startIndex = 0) => {
+    if (!images || !images.length) return;
+    setGalleryImages(images);
+    setSelectedImageIndex(startIndex);
+    setGalleryScale(1);
+    setPan({ x: 0, y: 0 });
+    setIsDragging(false);
+  }, []);
+  const closeArtworkGallery = useCallback(() => {
+    setGalleryImages([]);
+    setSelectedImageIndex(0);
+    setGalleryScale(1);
+    setPan({ x: 0, y: 0 });
+    setIsDragging(false);
+    if (zoomTimerRef.current) clearTimeout(zoomTimerRef.current);
+  }, []);
+
+  const startZoomHold = useCallback((event) => {
+    if (zoomTimerRef.current) clearTimeout(zoomTimerRef.current);
+    if (event && typeof event.clientX === "number") {
+      dragStartRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+        panX: pan.x,
+        panY: pan.y,
+      };
+    }
+    event.preventDefault();
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    setIsDragging(true);
+    setGalleryScale(1.8);
+  }, [pan.x, pan.y]);
+
+  const stopZoomHold = useCallback((event) => {
+    if (zoomTimerRef.current) clearTimeout(zoomTimerRef.current);
+    event?.currentTarget?.releasePointerCapture?.(event.pointerId);
+    setIsDragging(false);
+    setGalleryScale(1);
+    setPan({ x: 0, y: 0 });
+  }, []);
+
+  const handleGalleryPointerMove = useCallback((event) => {
+    if (!isDragging || galleryScale <= 1) return;
+    const dx = event.clientX - dragStartRef.current.x;
+    const dy = event.clientY - dragStartRef.current.y;
+    setPan({
+      x: dragStartRef.current.panX + dx * 0.9,
+      y: dragStartRef.current.panY + dy * 0.9,
+    });
+  }, [galleryScale, isDragging]);
+
+  useEffect(() => {
+    return () => {
+      if (zoomTimerRef.current) clearTimeout(zoomTimerRef.current);
+    };
+  }, []);
 
   return (
-    <div className="gallery-root">
+    <div className="gallery-root page-shell">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@300;400;500;600&display=swap');
 
@@ -379,7 +528,6 @@ export default function GaleriaArte() {
           font-weight: 500;
         }
 
-        /* ---------- Fondo decorativo tipo pintura ---------- */
         .paint-layer {
           position: fixed;
           inset: 0;
@@ -392,14 +540,19 @@ export default function GaleriaArte() {
           filter: blur(50px);
           opacity: 0.35;
           mix-blend-mode: multiply;
+          animation: blobFloat 18s ease-in-out infinite alternate;
         }
-        .blob--1 { top: -8%; right: -10%; width: 46vw; height: 46vw; background: radial-gradient(circle at 30% 30%, var(--ochre), transparent 70%); }
-        .blob--2 { bottom: 5%; left: -12%; width: 38vw; height: 38vw; background: radial-gradient(circle at 60% 40%, var(--sage), transparent 70%); }
-        .blob--3 { top: 40%; left: 45%; width: 26vw; height: 26vw; background: radial-gradient(circle at 50% 50%, var(--sand), transparent 75%); opacity: 0.5; }
+        @keyframes blobFloat {
+          0% { transform: translate3d(0, 0, 0) scale(1); }
+          50% { transform: translate3d(12px, -14px, 0) scale(1.04); }
+          100% { transform: translate3d(-10px, 18px, 0) scale(0.98); }
+        }
+        .blob--1 { top: -8%; right: -10%; width: 46vw; height: 46vw; background: radial-gradient(circle at 30% 30%, var(--ochre), transparent 70%); animation-delay: 0.2s; }
+        .blob--2 { bottom: 5%; left: -12%; width: 38vw; height: 38vw; background: radial-gradient(circle at 60% 40%, var(--sage), transparent 70%); animation-delay: 1.2s; }
+        .blob--3 { top: 40%; left: 45%; width: 26vw; height: 26vw; background: radial-gradient(circle at 50% 50%, var(--sand), transparent 75%); opacity: 0.5; animation-delay: 2.4s; }
 
         .content { position: relative; z-index: 1; }
 
-        /* ---------- Header ---------- */
         .nav {
           display: flex;
           align-items: center;
@@ -411,19 +564,24 @@ export default function GaleriaArte() {
           font-size: 1.15rem;
           letter-spacing: 0.02em;
         }
-        .nav__mark span { color: var(--ochre); }
+        .nav__location {
+          font-size: 0.8rem;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(42, 40, 36, 0.72);
+        }
         @media (max-width: 480px) {
           .nav { padding: 18px 5vw; }
           .nav__mark { font-size: 0.95rem; }
+          .nav__location { letter-spacing: 0.1em; font-size: 0.68rem; }
         }
 
-        /* ---------- Hero ---------- */
         .hero {
           display: grid;
-          grid-template-columns: 1.1fr 0.9fr;
-          gap: 3rem;
+          grid-template-columns: 1.08fr 1.12fr;
+          gap: 2.5rem;
           align-items: center;
-          padding: 4vh 6vw 8vh;
+          padding: 0 6vw 8vh;
           min-height: 72vh;
         }
         @media (max-width: 860px) {
@@ -438,14 +596,23 @@ export default function GaleriaArte() {
           .hero { padding: 2.2vh 5vw 4vh; }
           .hero__visual { aspect-ratio: 4/4.6; }
         }
-        .hero__eyebrow-free { color: var(--sage); font-size: 0.95rem; margin-bottom: 1rem; }
-        .hero__title {
-          font-size: clamp(3rem, 6.5vw, 5rem);
-          line-height: 1.15;
+        .hero__eyebrow-free {
+          color: var(--sage);
+          font-size: clamp(1.15rem, 2vw, 2rem);
+          margin: 0 0 1.2rem;
           letter-spacing: 0.01em;
+          font-weight: 400;
+          font-family: 'Fraunces', serif;
+          font-style: normal;
+        }
+        .hero__title {
+          font-size: clamp(5.5rem, 9vw, 12rem);
+          line-height: 0.85;
+          letter-spacing: -0.06em;
           font-style: italic;
           font-optical-sizing: auto;
           color: var(--graphite);
+          margin: 0;
         }
         .hero__desc {
           margin-top: 1.6rem;
@@ -459,44 +626,73 @@ export default function GaleriaArte() {
         }
         .hero__stroke {
           position: relative;
-          height: 5px;
-          width: 90px;
-          margin: 0.7rem 0 0;
-          background: var(--ochre);
-          border-radius: 3px;
-          transform-origin: left;
-          animation: strokeGrow 1.1s cubic-bezier(.22,1,.36,1) 0.3s both;
+          height: 3px;
+          width: min(280px, 62vw);
+          margin: 1.8rem 0 0;
+          background: linear-gradient(90deg, var(--ochre) 0%, rgba(168,112,60,0.88) 55%, rgba(168,112,60,0.58) 100%);
+          border-radius: 999px;
+          transform-origin: left center;
+          animation: strokeGrow 1.15s cubic-bezier(.22,1,.36,1) 0.3s both;
+          box-shadow: 0 1px 0 rgba(42,40,36,0.04), 0 6px 18px rgba(168,112,60,0.18);
         }
-        @keyframes strokeGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        @keyframes strokeGrow {
+          from { transform: scaleX(0.25); opacity: 0; }
+          to { transform: scaleX(1); opacity: 1; }
+        }
 
         .hero__visual {
           position: relative;
           aspect-ratio: 4/5;
-          border-radius: 3px;
+          width: min(100%, 620px);
+          justify-self: end;
+          border-radius: 0;
+          overflow: hidden;
+          background: transparent;
+          box-shadow: none;
+          margin: 0;
+          padding: 0;
+          line-height: 0;
         }
         .hero__visual img {
           display: block;
           width: 100%; height: 100%; object-fit: cover;
-          border-radius: 3px;
-          box-shadow: 0 30px 60px -20px rgba(42,40,36,0.35);
+          object-position: center center;
+          border-radius: 0;
+          box-shadow: none;
+          background: transparent;
+          margin: 0;
+          padding: 0;
         }
         .hero__visual-frame {
           position: absolute;
           inset: 0;
-          border: 1.5px solid rgba(255,253,249,0.55);
-          border-radius: 3px;
+          border: none;
+          background: transparent;
+          border-radius: 0;
           pointer-events: none;
         }
 
-        /* entrada escalonada del hero */
         .hero-anim { opacity: 0; transform: translateY(22px); transition: opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1); }
         .hero-anim--in { opacity: 1; transform: translateY(0); }
 
-        /* ---------- Reveal genérico al hacer scroll ---------- */
-        .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1); }
+        .reveal {
+          opacity: 0;
+          transform: translateY(26px);
+          transition: opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1);
+          transition-delay: 0.08s;
+        }
         .reveal--in { opacity: 1; transform: translateY(0); }
 
-        /* ---------- Filtros ---------- */
+        .page-shell {
+          opacity: 0;
+          transform: translateY(18px);
+          animation: pageEnter 1s cubic-bezier(.22,1,.36,1) forwards;
+        }
+        @keyframes pageEnter {
+          0% { opacity: 0; transform: translateY(22px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+
         .filters {
           display: flex;
           flex-wrap: wrap;
@@ -534,7 +730,7 @@ export default function GaleriaArte() {
           position: absolute;
           inset: 0;
           background: var(--graphite);
-          border-radius: 50% ;
+          border-radius: 50%;
           transform: scale(0);
           transform-origin: center;
           transition: transform .5s cubic-bezier(.22,1,.36,1);
@@ -545,7 +741,149 @@ export default function GaleriaArte() {
         .filter-btn--active { background: var(--graphite); color: var(--canvas-white); border-color: var(--graphite); }
         .filter-btn--active::before { display: none; }
 
-        /* ---------- Grid de obras ---------- */
+        .studio {
+          padding: 0 6vw 3.5rem;
+        }
+        .studio__shell {
+          position: relative;
+          background: rgba(255, 253, 249, 0.36);
+          border: 1px solid rgba(42, 40, 36, 0.08);
+          padding: 1.2rem 1rem 1.4rem;
+        }
+        .studio__header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          margin-bottom: 1rem;
+        }
+        .studio__title {
+          font-size: clamp(1.35rem, 2vw, 2rem);
+          letter-spacing: -0.04em;
+        }
+        .studio__nav {
+          display: flex;
+          gap: 0.65rem;
+        }
+        .studio__arrow {
+          border: none;
+          background: transparent;
+          color: rgba(42, 40, 36, 0.8);
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: transform .2s ease, opacity .2s ease, color .2s ease;
+          opacity: 0.8;
+          animation: arrowPulse 3.2s ease-in-out infinite;
+        }
+        @keyframes arrowPulse {
+          0%, 100% {
+            transform: translateX(0) scale(1);
+            opacity: 0.7;
+          }
+          40% {
+            transform: translateX(3px) scale(1.06);
+            opacity: 1;
+          }
+          60% {
+            transform: translateX(-2px) scale(1.03);
+            opacity: 0.85;
+          }
+        }
+        .studio__arrow:hover {
+          transform: translateY(-1px) scale(1.08);
+          color: var(--graphite);
+          opacity: 1;
+        }
+        .studio__viewport {
+          display: grid;
+          grid-template-columns: 52px minmax(0, 1fr) 52px;
+          align-items: center;
+          gap: 0.75rem;
+          max-width: 900px;
+          margin: 0 auto;
+        }
+        .studio__artframe {
+          position: relative;
+          width: min(100%, 620px);
+          margin: 0 auto;
+          aspect-ratio: 4 / 5;
+          overflow: hidden;
+          background: #ece3d8;
+          box-shadow: 0 26px 52px -30px rgba(42, 40, 36, 0.4);
+          animation: studioImageIn .7s cubic-bezier(.22,1,.36,1) both;
+        }
+        @keyframes studioImageIn {
+          0% {
+            opacity: 0;
+            transform: translateY(18px) scale(0.97) rotate(-1.2deg);
+            filter: blur(4px);
+          }
+          35% {
+            opacity: 0.7;
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotate(0deg);
+            filter: blur(0);
+          }
+        }
+        .studio__artframe img {
+          width: 100%;
+          height: 100%;
+          display: block;
+          object-fit: cover;
+          filter: saturate(0.96) contrast(1.04);
+        }
+        .studio__info {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+        .studio__eyebrow {
+          margin: 0 0 0.25rem;
+          font-size: 0.72rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #7c756d;
+        }
+        .studio__name {
+          margin: 0;
+          font-size: clamp(1.4rem, 2vw, 2.1rem);
+          letter-spacing: -0.04em;
+        }
+        .studio__specs {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 0.25rem;
+          text-align: right;
+          color: #504a43;
+        }
+        .studio__specs span {
+          font-size: 0.82rem;
+          color: #7c756d;
+        }
+        .studio__specs strong {
+          font-size: clamp(1rem, 1.6vw, 1.25rem);
+          font-weight: 500;
+          color: var(--ochre);
+          font-style: normal;
+        }
+        @media (max-width: 480px) {
+          .studio { padding: 0 5vw 2.6rem; }
+          .studio__shell { padding: 0.9rem 0.8rem 1.1rem; }
+          .studio__viewport { grid-template-columns: 40px minmax(0, 1fr) 40px; }
+          .studio__info { flex-direction: column; align-items: flex-start; }
+          .studio__specs { align-items: flex-start; text-align: left; }
+        }
+
         .art-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -560,11 +898,20 @@ export default function GaleriaArte() {
           }
         }
         .art-card {
-          animation: cardIn .7s cubic-bezier(.22,1,.36,1) both;
+          opacity: 0;
+          transform: translateY(24px) scale(0.985);
+          animation: cardIn .8s cubic-bezier(.22,1,.36,1) both;
+          animation-delay: var(--card-delay, 0ms);
         }
         @keyframes cardIn {
-          from { opacity: 0; transform: translateY(24px) scale(0.98); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
+          0% {
+            opacity: 0;
+            transform: translateY(24px) scale(0.985);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
         }
         .art-card__media { position: relative; }
         .art-card__frame {
@@ -610,8 +957,7 @@ export default function GaleriaArte() {
           transition: transform .25s ease, box-shadow .25s ease;
           touch-action: manipulation;
         }
-        .art-card__quick-wa:hover,
-        .art-card__quick-wa:active {
+        .art-card__quick-wa:hover, .art-card__quick-wa:active {
           transform: scale(1.08);
           box-shadow: 0 8px 20px rgba(0,0,0,0.28);
         }
@@ -623,7 +969,96 @@ export default function GaleriaArte() {
         }
         .art-card__price { font-size: 0.92rem; color: var(--ochre); margin: 0; }
 
-        /* ---------- Chat flotante ---------- */
+        .gallery-zoom {
+          position: fixed;
+          inset: 0;
+          z-index: 60;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          background: rgba(24, 18, 12, 0.72);
+          backdrop-filter: blur(10px);
+        }
+        .gallery-zoom__panel {
+          position: relative;
+          width: min(860px, calc(100vw - 32px));
+          max-height: 90vh;
+          background: rgba(255, 253, 249, 0.97);
+          border: none;
+          border-radius: 0;
+          box-shadow: 0 30px 70px rgba(22, 18, 12, 0.35);
+          overflow: hidden;
+          animation: galleryZoomIn .38s cubic-bezier(.22,1,.36,1) both;
+        }
+        @keyframes galleryZoomIn {
+          from { opacity: 0; transform: scale(0.96) translateY(16px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .gallery-zoom__close {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          z-index: 3;
+          width: 38px; height: 38px; border-radius: 50%;
+          border: none; background: rgba(42,40,36,0.8); color: white;
+          display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .gallery-zoom__main {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+          background: #f8f1e7;
+        }
+        .gallery-zoom__img-wrap {
+          position: relative;
+          width: 100%;
+          min-height: min(72vh, 760px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #f4efe7;
+          overflow: hidden;
+          cursor: zoom-in;
+          touch-action: none;
+          padding: 18px;
+        }
+        .gallery-zoom__img {
+          display: block;
+          max-width: 100%;
+          max-height: 72vh;
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          object-position: center;
+          background: transparent;
+          border-radius: 0;
+          outline: none;
+          transform-origin: center center;
+          transition: transform .25s cubic-bezier(.22,1,.36,1), filter .25s ease;
+          will-change: transform;
+        }
+        .gallery-zoom__img--active { cursor: zoom-out; }
+        .gallery-zoom__thumbs {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
+          gap: 10px;
+          padding: 14px 14px 18px;
+          background: rgba(255,253,249,0.8);
+        }
+        .gallery-zoom__thumb {
+          border: 2px solid transparent;
+          background: transparent;
+          padding: 0; border-radius: 10px; overflow: hidden; cursor: pointer;
+          transition: border-color .2s ease, transform .2s ease;
+        }
+        .gallery-zoom__thumb img {
+          width: 100%; height: 92px; object-fit: cover; display: block;
+        }
+        .gallery-zoom__thumb--active {
+          border-color: rgba(168,112,60,0.9);
+          transform: translateY(-1px);
+        }
+
         .chat-widget {
           position: fixed;
           bottom: calc(20px + env(safe-area-inset-bottom, 0px));
@@ -703,7 +1138,6 @@ export default function GaleriaArte() {
         }
         .chat-widget__cta:hover { background: #347a4c; }
 
-        /* ---------- Footer ---------- */
         .footer {
           padding: 3rem 6vw 4rem;
           display: flex; justify-content: space-between; align-items: center;
@@ -721,9 +1155,8 @@ export default function GaleriaArte() {
 
       <div className="content">
         <nav className="nav">
-          <div className="nav__mark">
-            FIFI — Galería de Arte
-          </div>
+          <div className="nav__mark">FIFI — Galería de Arte</div>
+          <div className="nav__location">San Juan, Argentina</div>
         </nav>
 
         <header className="hero">
@@ -737,14 +1170,46 @@ export default function GaleriaArte() {
               para cada obra.
             </p>
           </div>
-          <div
-            className={`hero-anim ${loaded ? "hero-anim--in" : ""} hero__visual`}
-            style={{ transitionDelay: "150ms" }}
-          >
+          <div className={`hero-anim ${loaded ? "hero-anim--in" : ""} hero__visual`} style={{ transitionDelay: "150ms" }}>
             <div className="hero__visual-frame" />
             <img src={heroImage} alt="Obra destacada de la galería" />
           </div>
         </header>
+
+        <Reveal>
+          <section className="studio" aria-label="Estudio de obras destacadas">
+            <div className="studio__shell">
+              <div className="studio__header">
+                <h2 className="studio__title">Estudio</h2>
+              </div>
+
+              <div className="studio__viewport">
+                <button type="button" className="studio__arrow" aria-label="Ver obra anterior" onClick={() => moveStudio(-1)}>
+                  <ArrowLeft size={18} />
+                </button>
+
+                <div className="studio__artframe" key={studioWorks[studioIndex]?.id} onClick={() => openArtworkGallery(studioWorks[studioIndex].images, 0)}>
+                  <img src={studioWorks[studioIndex]?.image} alt={studioWorks[studioIndex]?.title} />
+                </div>
+
+                <button type="button" className="studio__arrow" aria-label="Ver obra siguiente" onClick={() => moveStudio(1)}>
+                  <ArrowRight size={18} />
+                </button>
+              </div>
+
+              <div className="studio__info">
+                <div>
+                  <p className="studio__eyebrow">Obra destacada</p>
+                  <h3 className="studio__name">{studioWorks[studioIndex]?.title}</h3>
+                </div>
+                <div className="studio__specs">
+                  <span>{studioWorks[studioIndex]?.size}</span>
+                  <strong>{studioWorks[studioIndex]?.price}</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+        </Reveal>
 
         <Reveal>
           <div className="filters">
@@ -765,10 +1230,61 @@ export default function GaleriaArte() {
         <Reveal>
           <div className="art-grid" key={activeCategory}>
             {filtered.map((art, i) => (
-              <ArtCard key={art.id} art={art} index={i} />
+              <ArtCard key={art.id} art={art} index={i} onOpenGallery={openArtworkGallery} />
             ))}
           </div>
         </Reveal>
+
+        {galleryImages.length > 0 && (
+          <div className="gallery-zoom" onClick={closeArtworkGallery}>
+            <div className="gallery-zoom__panel" onClick={(e) => e.stopPropagation()}>
+              <button className="gallery-zoom__close" onClick={closeArtworkGallery} aria-label="Cerrar vista ampliada">
+                <X size={18} />
+              </button>
+
+              <div className="gallery-zoom__main">
+                <div
+                  className={`gallery-zoom__img-wrap ${galleryScale > 1 ? "gallery-zoom__img--active" : ""}`}
+                  onPointerDown={startZoomHold}
+                  onPointerMove={handleGalleryPointerMove}
+                  onPointerUp={stopZoomHold}
+                  onPointerLeave={stopZoomHold}
+                  onPointerCancel={stopZoomHold}
+                  onWheel={(event) => {
+                    event.preventDefault();
+                    const nextScale = Math.min(2.4, Math.max(1, galleryScale + (event.deltaY < 0 ? 0.12 : -0.12)));
+                    setGalleryScale(nextScale);
+                    if (nextScale <= 1) setPan({ x: 0, y: 0 });
+                  }}
+                >
+                  <img
+                    className="gallery-zoom__img"
+                    src={galleryImages[selectedImageIndex] || galleryImages[0]}
+                    alt="Vista ampliada de la obra"
+                    style={{
+                      transform: `translate(${pan.x}px, ${pan.y}px) scale(${galleryScale})`,
+                      filter: galleryScale > 1 ? "saturate(1.05) contrast(1.03)" : "none",
+                    }}
+                  />
+                </div>
+
+                <div className="gallery-zoom__thumbs">
+                  {galleryImages.map((img, idx) => (
+                    <button
+                      key={`${img}-${idx}`}
+                      type="button"
+                      className={`gallery-zoom__thumb ${idx === selectedImageIndex ? "gallery-zoom__thumb--active" : ""}`}
+                      onClick={() => setSelectedImageIndex(idx)}
+                      aria-label={`Ver foto ${idx + 1}`}
+                    >
+                      <img src={img} alt={`Foto ${idx + 1}`} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <footer className="footer">
           <span>FIFI — San Juan</span>
