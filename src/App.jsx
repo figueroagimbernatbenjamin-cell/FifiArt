@@ -198,7 +198,11 @@ function ArtCard({ art, index }) {
             alt={art.title}
             className={`art-card__img ${imgLoaded ? "art-card__img--loaded" : ""}`}
             loading="lazy"
-            style={{ objectPosition: art.imagePosition || "center center" }}
+            style={{
+              objectFit: "cover",
+              objectPosition: art.imagePosition || "center center",
+              background: "#efe9df",
+            }}
             onLoad={() => setImgLoaded(true)}
             onError={handleImageError}
           />
@@ -508,13 +512,13 @@ export default function App() {
         .hero__visual img {
           display: block;
           width: 100%; height: 100%;
-          object-fit: contain;
+          object-fit: cover;
           object-position: center;
           border: none;
           border-radius: 3px;
           padding: 0;
           box-shadow: 0 30px 60px -20px rgba(42,40,36,0.35);
-          background: transparent !important;
+          background: #efe9df !important;
           filter: drop-shadow(0 10px 18px rgba(42,40,36,0.12));
         }
         .hero__visual-frame {
@@ -613,15 +617,15 @@ export default function App() {
         .art-card__frame:hover { box-shadow: 0 26px 46px -16px rgba(42,40,36,0.4); }
         .art-card__img {
           width: 100%; height: 100%;
-          object-fit: contain;
+          object-fit: cover;
           object-position: center;
           border: none;
           padding: 0;
           transition: transform .5s ease, opacity .7s ease, filter .7s ease;
-          filter: saturate(1) contrast(1.04) blur(0);
+          filter: saturate(1.02) contrast(1.06) blur(0);
           opacity: 0;
-          transform: scale(1.02);
-          background: transparent !important;
+          transform: scale(1.04);
+          background: #efe9df !important;
         }
         .art-card__img--loaded {
           opacity: 1;
