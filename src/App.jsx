@@ -187,7 +187,7 @@ function ArtCard({ art, index }) {
   );
 
   const waMessage = art.sold
-    ? `Hola, vi que la obra "${art.title}" (${art.size}) ya está vendida. ¿Podés recomendarme algo similar o sugerirme otra pieza en ese estilo?`
+    ? `Hola, me interesa algo parecido al cuadro "${art.title}"${art.size ? ` (${art.size})` : ""}. ¿Podés recomendarme una obra similar o sugerirme alguna opción en ese estilo?`
     : `Hola, me interesa la obra "${art.title}" (${art.size}). ¿Me pasás precio y disponibilidad?`;
 
   return (
