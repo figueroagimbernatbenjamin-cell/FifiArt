@@ -50,7 +50,7 @@ const ARTWORKS = [
   { id: 6, title: "Cuadro 6", category: "Botánico", size: "", price: "Vendido", seed: "cuadro-6", tall: true, image: REAL_ART_IMAGES[6], imagePosition: "50% 38%", sold: true },
   { id: 7, title: "Cuadro 7", category: "Óleo", size: "", price: "Vendido", seed: "cuadro-7", image: REAL_ART_IMAGES[7], imagePosition: "50% 50%", sold: true },
   { id: 8, title: "Cuadro 8", category: "Textura Minimalista", size: "", price: "Vendido", seed: "cuadro-8", image: REAL_ART_IMAGES[8], imagePosition: "50% 50%", sold: true },
-  { id: 9, title: "Cuadro 9", category: "Abstracto", size: "1,30 x 90 cm", price: "Consultar", seed: "cuadro-9", tall: true, image: REAL_ART_IMAGES[9], imagePosition: "50% 40%", sold: false },
+  { id: 9, title: "Cuadro 9", category: "Abstracto", size: "1,30 x 90 cm", price: "Vendido", seed: "cuadro-9", tall: true, image: REAL_ART_IMAGES[9], imagePosition: "50% 40%", sold: true },
   { id: 10, title: "Cuadro 10", category: "Botánico", size: "70x90 cm", price: "$260.000", seed: "cuadro-10", tall: true, image: REAL_ART_IMAGES[10], imagePosition: "50% 48%", sold: false },
   { id: 11, title: "Cuadro 11", category: "Óleo", size: "", price: "Vendido", seed: "cuadro-11", tall: true, image: REAL_ART_IMAGES[11], imagePosition: "50% 40%", sold: true },
 ];
