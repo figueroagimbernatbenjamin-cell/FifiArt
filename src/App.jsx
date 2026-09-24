@@ -332,6 +332,13 @@ export default function App() {
 
   const handleCategoryClick = useCallback((category) => setActiveCategory(category), []);
 
+  const scrollToGallery = useCallback(() => {
+    const gallery = document.getElementById("galeria");
+    if (gallery) {
+      gallery.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
+
   return (
     <div className="gallery-root">
       <style>{`
@@ -382,6 +389,7 @@ export default function App() {
           align-items: center;
           justify-content: space-between;
           padding: 22px 6vw;
+          gap: 1rem;
         }
         .nav__mark {
           font-family: 'Fraunces', serif;
@@ -389,9 +397,49 @@ export default function App() {
           letter-spacing: 0.02em;
         }
         .nav__mark span { color: var(--ochre); }
+        .nav__actions {
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+        }
+        .nav__button {
+          appearance: none;
+          border: 1px solid rgba(42,40,36,0.2);
+          background: rgba(255,255,255,0.35);
+          color: var(--graphite);
+          border-radius: 999px;
+          padding: 0.7rem 1.1rem;
+          font-family: 'Work Sans', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+          touch-action: manipulation;
+        }
+        .nav__button:hover,
+        .nav__button:active {
+          transform: translateY(-1px);
+        }
+        .nav__button--primary {
+          background: #3d8f5b;
+          border-color: #3d8f5b;
+          color: white;
+          box-shadow: 0 8px 20px rgba(61,143,91,0.25);
+        }
+        .nav__button--primary:hover,
+        .nav__button--primary:active {
+          background: #347a4c;
+        }
+        .nav__button--ghost {
+          background: rgba(255,255,255,0.3);
+        }
         @media (max-width: 480px) {
           .nav { padding: 18px 5vw; }
           .nav__mark { font-size: 0.95rem; }
+          .nav__actions { gap: 0.45rem; }
+          .nav__button { padding: 0.62rem 0.9rem; font-size: 0.78rem; }
         }
 
         .hero {
@@ -712,6 +760,23 @@ export default function App() {
           <div className="nav__mark">
             FIFI — Galería de Arte
           </div>
+
+          <div className="nav__actions">
+            <button
+              type="button"
+              className="nav__button nav__button--ghost"
+              onClick={scrollToGallery}
+            >
+              Ver galería
+            </button>
+            <button
+              type="button"
+              className="nav__button nav__button--primary"
+              onClick={() => openWhatsApp("Hola! Vi la galería online y quiero consultar por las obras disponibles.")}
+            >
+              WhatsApp
+            </button>
+          </div>
         </nav>
 
         <header className="hero">
@@ -751,7 +816,7 @@ export default function App() {
         </Reveal>
 
         <Reveal>
-          <div className="art-grid" key={activeCategory}>
+          <div id="galeria" className="art-grid" key={activeCategory}>
             {filtered.map((art, i) => (
               <ArtCard key={art.id} art={art} index={i} />
             ))}
