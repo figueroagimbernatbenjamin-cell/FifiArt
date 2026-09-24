@@ -42,17 +42,17 @@ const REAL_ART_IMAGES = {
 };
 
 const ARTWORKS = [
-  { id: 1, title: "Cuadro 1", category: "Abstracto", size: "100x140 cm", price: "$260.000", seed: "cuadro-1", tall: true, image: REAL_ART_IMAGES[1], imagePosition: "50% 36%", sold: true },
-  { id: 2, title: "Cuadro 2", category: "Botánico", size: "60x80 cm", price: "$115.000", seed: "cuadro-2", image: REAL_ART_IMAGES[2], imagePosition: "50% 52%", sold: true },
-  { id: 3, title: "Cuadro 3", category: "Óleo", size: "90x120 cm", price: "$245.000", seed: "cuadro-3", tall: true, image: REAL_ART_IMAGES[3], imagePosition: "50% 44%", sold: true },
-  { id: 4, title: "Cuadro 4", category: "Textura Minimalista", size: "70x70 cm", price: "$92.000", seed: "cuadro-4", image: REAL_ART_IMAGES[4], imagePosition: "50% 50%", sold: true },
-  { id: 5, title: "Cuadro 5", category: "Abstracto", size: "80x100 cm", price: "$170.000", seed: "cuadro-5", image: REAL_ART_IMAGES[5], imagePosition: "50% 52%", sold: true },
-  { id: 6, title: "Cuadro 6", category: "Botánico", size: "100x100 cm", price: "$195.000", seed: "cuadro-6", tall: true, image: REAL_ART_IMAGES[6], imagePosition: "50% 38%", sold: true },
-  { id: 7, title: "Cuadro 7", category: "Óleo", size: "60x90 cm", price: "$145.000", seed: "cuadro-7", image: REAL_ART_IMAGES[7], imagePosition: "50% 50%", sold: true },
-  { id: 8, title: "Cuadro 8", category: "Textura Minimalista", size: "80x80 cm", price: "$105.000", seed: "cuadro-8", image: REAL_ART_IMAGES[8], imagePosition: "50% 50%", sold: true },
-  { id: 9, title: "Cuadro 9", category: "Abstracto", size: "110x140 cm", price: "$280.000", seed: "cuadro-9", tall: true, image: REAL_ART_IMAGES[9], imagePosition: "50% 40%", sold: true },
-  { id: 10, title: "Cuadro 10", category: "Botánico", size: "50x70 cm", price: "$85.000", seed: "cuadro-10", tall: true, image: REAL_ART_IMAGES[10], imagePosition: "50% 48%", sold: true },
-  { id: 11, title: "Cuadro 11", category: "Óleo", size: "100x130 cm", price: "$260.000", seed: "cuadro-11", tall: true, image: REAL_ART_IMAGES[11], imagePosition: "50% 40%", sold: true },
+  { id: 1, title: "Cuadro 1", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-1", tall: true, image: REAL_ART_IMAGES[1], imagePosition: "50% 36%", sold: true },
+  { id: 2, title: "Cuadro 2", category: "Botánico", size: "90x80 cm", price: "$250.000", seed: "cuadro-2", image: REAL_ART_IMAGES[2], imagePosition: "50% 52%", sold: false },
+  { id: 3, title: "Cuadro 3", category: "Óleo", size: "", price: "Vendido", seed: "cuadro-3", tall: true, image: REAL_ART_IMAGES[3], imagePosition: "50% 44%", sold: true },
+  { id: 4, title: "Cuadro 4", category: "Textura Minimalista", size: "90x70 cm", price: "$280.000", seed: "cuadro-4", image: REAL_ART_IMAGES[4], imagePosition: "50% 50%", sold: false },
+  { id: 5, title: "Cuadro 5", category: "Abstracto", size: "1,10 x 90 cm", price: "$350.000", seed: "cuadro-5", image: REAL_ART_IMAGES[5], imagePosition: "50% 52%", sold: false },
+  { id: 6, title: "Cuadro 6", category: "Botánico", size: "", price: "Vendido", seed: "cuadro-6", tall: true, image: REAL_ART_IMAGES[6], imagePosition: "50% 38%", sold: true },
+  { id: 7, title: "Cuadro 7", category: "Óleo", size: "", price: "Vendido", seed: "cuadro-7", image: REAL_ART_IMAGES[7], imagePosition: "50% 50%", sold: true },
+  { id: 8, title: "Cuadro 8", category: "Textura Minimalista", size: "", price: "Vendido", seed: "cuadro-8", image: REAL_ART_IMAGES[8], imagePosition: "50% 50%", sold: true },
+  { id: 9, title: "Cuadro 9", category: "Abstracto", size: "1,30 x 90 cm", price: "Consultar", seed: "cuadro-9", tall: true, image: REAL_ART_IMAGES[9], imagePosition: "50% 40%", sold: false },
+  { id: 10, title: "Cuadro 10", category: "Botánico", size: "70x90 cm", price: "$260.000", seed: "cuadro-10", tall: true, image: REAL_ART_IMAGES[10], imagePosition: "50% 48%", sold: false },
+  { id: 11, title: "Cuadro 11", category: "Óleo", size: "", price: "Vendido", seed: "cuadro-11", tall: true, image: REAL_ART_IMAGES[11], imagePosition: "50% 40%", sold: true },
 ];
 
 const WHATSAPP_NUMBER = "5492645059194";
