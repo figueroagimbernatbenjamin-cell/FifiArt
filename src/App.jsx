@@ -22,24 +22,37 @@ function placeholderArt(seed, w = 700, h = 900) {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
-const RAW_BASE = "https://raw.githubusercontent.com/figueroagimbernatbenjamin-cell/FifiArt/main";
 const LOCAL_ART_ASSETS = {
   hero: new URL("./assets/hero-fifi-fixed.png", import.meta.url).href,
   cuadro10: new URL("./assets/cuadro10-fixed.png", import.meta.url).href,
 };
 
+const REAL_ART_IMAGES = {
+  1: new URL("../Cuadro 1.JPG", import.meta.url).href,
+  2: new URL("../Cuadro 2.JPG", import.meta.url).href,
+  3: new URL("../Cuadro 3.JPG", import.meta.url).href,
+  4: new URL("../Cuadro 4.JPG", import.meta.url).href,
+  5: new URL("../Cuadro 5.JPG", import.meta.url).href,
+  6: new URL("../Cuadro 6 Mejorado.PNG", import.meta.url).href,
+  7: new URL("../Cuadro 7 Mejorado.jpg", import.meta.url).href,
+  8: new URL("../Cuadro 8.JPG", import.meta.url).href,
+  9: new URL("../Cuadro 9.JPG", import.meta.url).href,
+  10: new URL("../Cuadro 10.JPG", import.meta.url).href,
+  11: new URL("../Cuadro 11.JPG", import.meta.url).href,
+};
+
 const ARTWORKS = [
-  { id: 1, title: "Cuadro 1", category: "Abstracto", size: "100x140 cm", price: "$185.000", seed: "cuadro-1", tall: true, image: `${RAW_BASE}/Cuadro%201.JPG`, imagePosition: "50% 36%" },
-  { id: 2, title: "Cuadro 2", category: "Botánico", size: "60x80 cm", price: "$96.000", seed: "cuadro-2", image: `${RAW_BASE}/Cuadro%202.JPG`, imagePosition: "50% 52%" },
-  { id: 3, title: "Cuadro 3", category: "Óleo", size: "90x120 cm", price: "$210.000", seed: "cuadro-3", tall: true, image: `${RAW_BASE}/Cuadro%203.JPG`, imagePosition: "50% 44%" },
-  { id: 4, title: "Cuadro 4", category: "Textura Minimalista", size: "70x70 cm", price: "$78.000", seed: "cuadro-4", image: `${RAW_BASE}/Cuadro%204.JPG`, imagePosition: "50% 50%" },
-  { id: 5, title: "Cuadro 5", category: "Abstracto", size: "80x100 cm", price: "$142.000", seed: "cuadro-5", image: `${RAW_BASE}/Cuadro%205.JPG`, imagePosition: "50% 52%" },
-  { id: 6, title: "Cuadro 6", category: "Botánico", size: "100x100 cm", price: "$168.000", seed: "cuadro-6", tall: true, image: `${RAW_BASE}/Cuadro%206%20Mejorado.PNG`, imagePosition: "50% 38%" },
-  { id: 7, title: "Cuadro 7", category: "Óleo", size: "60x90 cm", price: "$124.000", seed: "cuadro-7", image: `${RAW_BASE}/Cuadro%207%20Mejorado.jpg`, imagePosition: "50% 50%" },
-  { id: 8, title: "Cuadro 8", category: "Textura Minimalista", size: "80x80 cm", price: "$89.000", seed: "cuadro-8", image: `${RAW_BASE}/Cuadro%208.JPG`, imagePosition: "50% 50%" },
-  { id: 9, title: "Cuadro 9", category: "Abstracto", size: "110x140 cm", price: "$198.000", seed: "cuadro-9", tall: true, image: `${RAW_BASE}/Cuadro%209.JPG`, imagePosition: "50% 40%" },
-  { id: 10, title: "Cuadro 10", category: "Botánico", size: "50x70 cm", price: "$72.000", seed: "cuadro-10", tall: true, image: LOCAL_ART_ASSETS.cuadro10, imagePosition: "50% 48%" },
-  { id: 11, title: "Cuadro 11", category: "Óleo", size: "100x130 cm", price: "$220.000", seed: "cuadro-11", tall: true, image: `${RAW_BASE}/Cuadro%2011.JPG`, imagePosition: "50% 40%" },
+  { id: 1, title: "Cuadro 1", category: "Abstracto", size: "100x140 cm", price: "$260.000", seed: "cuadro-1", tall: true, image: REAL_ART_IMAGES[1], imagePosition: "50% 36%", sold: true },
+  { id: 2, title: "Cuadro 2", category: "Botánico", size: "60x80 cm", price: "$115.000", seed: "cuadro-2", image: REAL_ART_IMAGES[2], imagePosition: "50% 52%", sold: true },
+  { id: 3, title: "Cuadro 3", category: "Óleo", size: "90x120 cm", price: "$245.000", seed: "cuadro-3", tall: true, image: REAL_ART_IMAGES[3], imagePosition: "50% 44%", sold: true },
+  { id: 4, title: "Cuadro 4", category: "Textura Minimalista", size: "70x70 cm", price: "$92.000", seed: "cuadro-4", image: REAL_ART_IMAGES[4], imagePosition: "50% 50%", sold: true },
+  { id: 5, title: "Cuadro 5", category: "Abstracto", size: "80x100 cm", price: "$170.000", seed: "cuadro-5", image: REAL_ART_IMAGES[5], imagePosition: "50% 52%", sold: true },
+  { id: 6, title: "Cuadro 6", category: "Botánico", size: "100x100 cm", price: "$195.000", seed: "cuadro-6", tall: true, image: REAL_ART_IMAGES[6], imagePosition: "50% 38%", sold: true },
+  { id: 7, title: "Cuadro 7", category: "Óleo", size: "60x90 cm", price: "$145.000", seed: "cuadro-7", image: REAL_ART_IMAGES[7], imagePosition: "50% 50%", sold: true },
+  { id: 8, title: "Cuadro 8", category: "Textura Minimalista", size: "80x80 cm", price: "$105.000", seed: "cuadro-8", image: REAL_ART_IMAGES[8], imagePosition: "50% 50%", sold: true },
+  { id: 9, title: "Cuadro 9", category: "Abstracto", size: "110x140 cm", price: "$280.000", seed: "cuadro-9", tall: true, image: REAL_ART_IMAGES[9], imagePosition: "50% 40%", sold: true },
+  { id: 10, title: "Cuadro 10", category: "Botánico", size: "50x70 cm", price: "$85.000", seed: "cuadro-10", tall: true, image: REAL_ART_IMAGES[10], imagePosition: "50% 48%", sold: true },
+  { id: 11, title: "Cuadro 11", category: "Óleo", size: "100x130 cm", price: "$260.000", seed: "cuadro-11", tall: true, image: REAL_ART_IMAGES[11], imagePosition: "50% 40%", sold: true },
 ];
 
 const WHATSAPP_NUMBER = "5492645059194";
@@ -64,15 +77,16 @@ function openWhatsApp(text = "Hola! Vi la galería online y quisiera hacer una c
 
   try {
     const popup = window.open(url, "_blank", "noopener,noreferrer");
-    if (!popup) {
-      window.location.href = url;
-      return;
+    if (popup) {
+      popup.opener = null;
+      return true;
     }
-    popup.opener = null;
-    return;
   } catch (error) {
-    window.location.href = url;
+    // Ignore popup blockers and continue with direct navigation.
   }
+
+  window.location.href = url;
+  return true;
 }
 
 function useReveal() {
@@ -136,6 +150,7 @@ function ArtCard({ art, index }) {
 
   const handleTouchStart = useCallback(
     (e) => {
+      e.preventDefault();
       setHovered(true);
       const t = e.touches[0];
       if (t) applyTiltFromPoint(t.clientX, t.clientY);
@@ -145,6 +160,7 @@ function ArtCard({ art, index }) {
 
   const handleTouchMove = useCallback(
     (e) => {
+      e.preventDefault();
       const t = e.touches[0];
       if (t) applyTiltFromPoint(t.clientX, t.clientY);
     },
@@ -170,7 +186,9 @@ function ArtCard({ art, index }) {
     [fallbackArt]
   );
 
-  const waMessage = `Hola, me interesa la obra "${art.title}" (${art.size}). ¿Me pasás precio y disponibilidad?`;
+  const waMessage = art.sold
+    ? `Hola, vi que la obra "${art.title}" (${art.size}) ya está vendida. ¿Podés recomendarme algo similar o sugerirme otra pieza en ese estilo?`
+    : `Hola, me interesa la obra "${art.title}" (${art.size}). ¿Me pasás precio y disponibilidad?`;
 
   return (
     <div
@@ -230,7 +248,7 @@ function ArtCard({ art, index }) {
           <Ruler size={13} strokeWidth={1.6} />
           {art.size}
         </p>
-        <p className="art-card__price">{art.price}</p>
+        <p className="art-card__price">{art.sold ? "Vendido" : art.price}</p>
       </div>
     </div>
   );
@@ -363,7 +381,11 @@ export default function App() {
           overflow-x: hidden;
         }
         .gallery-root * { box-sizing: border-box; }
-        .gallery-root h1, .gallery-root h2, .gallery-root h3 {
+          .gallery-root {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+          }
           font-family: 'Fraunces', serif;
           margin: 0;
           font-weight: 500;
@@ -421,6 +443,7 @@ export default function App() {
           cursor: pointer;
           transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
           touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
         }
         .nav__button:hover,
         .nav__button:active {
@@ -440,10 +463,23 @@ export default function App() {
           background: rgba(255,255,255,0.3);
         }
         @media (max-width: 480px) {
-          .nav { padding: 18px 5vw; }
+          .nav {
+            padding: 18px 5vw;
+            flex-direction: column;
+            align-items: flex-start;
+          }
           .nav__mark { font-size: 0.95rem; }
-          .nav__actions { gap: 0.45rem; }
-          .nav__button { padding: 0.62rem 0.9rem; font-size: 0.78rem; }
+          .nav__actions {
+            width: 100%;
+            justify-content: space-between;
+            gap: 0.45rem;
+          }
+          .nav__button {
+            flex: 1 1 0;
+            padding: 0.62rem 0.9rem;
+            font-size: 0.78rem;
+            min-height: 42px;
+          }
         }
 
         .hero {
@@ -463,8 +499,25 @@ export default function App() {
           }
         }
         @media (max-width: 480px) {
-          .hero { padding: 2.2vh 5vw 4vh; }
-          .hero__visual { aspect-ratio: 4/4.6; }
+          .hero {
+            padding: 1.6vh 5vw 3vh;
+            gap: 1.2rem;
+          }
+          .hero__visual {
+            width: min(100%, 360px);
+            aspect-ratio: 4/4.3;
+          }
+          .hero__eyebrow-free {
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+          }
+          .hero__title {
+            font-size: clamp(2.4rem, 13vw, 3.5rem);
+          }
+          .hero__desc {
+            margin-top: 1rem;
+            font-size: 0.94rem;
+          }
         }
         .hero__eyebrow-free { color: var(--sage); font-size: 0.95rem; margin-bottom: 1rem; }
         .hero__title {
@@ -555,6 +608,7 @@ export default function App() {
           transition: color .45s ease, border-color .45s ease;
           z-index: 0;
           touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
         }
         .filter-btn:focus-visible,
         .chat-widget__bubble-btn:focus-visible,
@@ -565,7 +619,11 @@ export default function App() {
         }
         @media (max-width: 480px) {
           .filters { padding: 0 5vw 2rem; gap: 0.5rem; }
-          .filter-btn { padding: 0.6rem 1.05rem; font-size: 0.85rem; }
+          .filter-btn {
+            padding: 0.6rem 1.05rem;
+            font-size: 0.85rem;
+            min-height: 42px;
+          }
         }
         .filter-btn::before {
           content: '';
@@ -591,9 +649,16 @@ export default function App() {
         }
         @media (max-width: 480px) {
           .art-grid {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1.6rem 1rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.2rem 0.8rem;
             padding: 0 5vw 6vh;
+          }
+          .art-card__info h3 {
+            font-size: 0.95rem;
+          }
+          .art-card__size,
+          .art-card__price {
+            font-size: 0.75rem;
           }
         }
         .art-card {
@@ -606,33 +671,48 @@ export default function App() {
         .art-card__media { position: relative; }
         .art-card__frame {
           position: relative;
-          border-radius: 3px;
+          border-radius: 12px;
           overflow: hidden;
           aspect-ratio: 4/5;
-          box-shadow: 0 14px 30px -14px rgba(42,40,36,0.28);
+          padding: 10px;
+          background: linear-gradient(145deg, rgba(255,255,255,0.38), rgba(106,92,72,0.12));
+          border: 1px solid rgba(42,40,36,0.08);
+          box-shadow: 0 18px 36px -18px rgba(42,40,36,0.32), inset 0 0 0 1px rgba(255,255,255,0.3);
           transition: transform .25s ease-out, box-shadow .3s ease;
           will-change: transform;
         }
         .art-card--tall .art-card__frame { aspect-ratio: 4/5.4; }
-        .art-card__frame:hover { box-shadow: 0 26px 46px -16px rgba(42,40,36,0.4); }
+        .art-card__frame:hover { box-shadow: 0 30px 52px -20px rgba(42,40,36,0.42), inset 0 0 0 1px rgba(255,255,255,0.35); }
+        .art-card__frame::after {
+          content: "";
+          position: absolute;
+          inset: 10px;
+          border-radius: 8px;
+          border: 1px solid rgba(255,255,255,0.4);
+          pointer-events: none;
+          box-shadow: inset 0 0 0 1px rgba(40,33,27,0.06);
+        }
         .art-card__img {
           width: 100%; height: 100%;
+          display: block;
           object-fit: cover;
           object-position: center;
+          border-radius: 8px;
           border: none;
           padding: 0;
-          transition: transform .5s ease, opacity .7s ease, filter .7s ease;
-          filter: saturate(1.02) contrast(1.06) blur(0);
+          transition: transform .55s ease, opacity .7s ease, filter .7s ease;
+          filter: saturate(1.04) contrast(1.08) blur(0);
           opacity: 0;
-          transform: scale(1.04);
+          transform: scale(1.08);
           background: #efe9df !important;
+          box-shadow: inset 0 0 0 1px rgba(42,40,36,0.04);
         }
         .art-card__img--loaded {
           opacity: 1;
-          filter: saturate(0.94) contrast(1.02) blur(0);
+          filter: saturate(0.96) contrast(1.02) blur(0);
           transform: scale(1);
         }
-        .art-card__frame:hover .art-card__img--loaded { transform: scale(1.16); }
+        .art-card__frame:hover .art-card__img--loaded { transform: scale(1.12); }
         .art-card__sheen {
           position: absolute; inset: 0;
           background: linear-gradient(135deg, rgba(255,255,255,0.16), transparent 55%);
@@ -651,11 +731,20 @@ export default function App() {
           z-index: 2;
           transition: transform .25s ease, box-shadow .25s ease;
           touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
         }
         .art-card__quick-wa:hover,
         .art-card__quick-wa:active {
           transform: scale(1.08);
           box-shadow: 0 8px 20px rgba(0,0,0,0.28);
+        }
+        @media (max-width: 480px) {
+          .art-card__quick-wa {
+            width: 46px;
+            height: 46px;
+            bottom: 10px;
+            right: 10px;
+          }
         }
         .art-card__info { padding-top: 0.85rem; }
         .art-card__info h3 { font-size: 1.05rem; font-weight: 500; }
@@ -673,6 +762,19 @@ export default function App() {
           display: flex; flex-direction: column; align-items: flex-end; gap: 14px;
           max-width: calc(100vw - 40px);
         }
+        @media (max-width: 480px) {
+          .chat-widget {
+            right: max(12px, env(safe-area-inset-right));
+            bottom: max(12px, env(safe-area-inset-bottom));
+          }
+          .chat-widget__bubble-btn {
+            width: 60px;
+            height: 60px;
+          }
+          .chat-widget__panel {
+            width: min(280px, calc(100vw - 24px));
+          }
+        }
         .chat-widget__bubble-btn {
           position: relative;
           width: 56px; height: 56px;
@@ -687,6 +789,7 @@ export default function App() {
           transition: background .3s ease;
           touch-action: manipulation;
           flex-shrink: 0;
+          -webkit-tap-highlight-color: transparent;
         }
         .chat-widget__bubble-btn--active { background: var(--graphite); animation: none; }
         @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
@@ -741,6 +844,8 @@ export default function App() {
           padding: 13px; font-size: 0.9rem; font-weight: 500;
           display: flex; align-items: center; justify-content: center; gap: 8px;
           cursor: pointer; transition: background .25s ease;
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
         }
         .chat-widget__cta:hover { background: #347a4c; }
 
@@ -751,6 +856,22 @@ export default function App() {
           font-size: 0.85rem; color: #6b675d;
         }
         @media (max-width: 640px) { .footer { flex-direction: column; gap: 10px; text-align: center; } }
+        @media (hover: none), (pointer: coarse) {
+          .art-card__frame,
+          .art-card__frame:hover,
+          .art-card__quick-wa,
+          .art-card__quick-wa:hover,
+          .filter-btn,
+          .nav__button {
+            transition: none;
+          }
+          .art-card__frame:hover .art-card__img--loaded {
+            transform: scale(1);
+          }
+          .art-card__img {
+            transform: scale(1);
+          }
+        }
       `}</style>
 
       <div className="paint-layer">
