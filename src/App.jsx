@@ -22,19 +22,24 @@ function placeholderArt(seed, w = 700, h = 900) {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
+const RAW_BASE = "https://raw.githubusercontent.com/figueroagimbernatbenjamin-cell/FifiArt/main";
+const LOCAL_ART_ASSETS = {
+  hero: new URL("./assets/hero-fifi-fixed.png", import.meta.url).href,
+  cuadro10: new URL("./assets/cuadro10-fixed.png", import.meta.url).href,
+};
+
 const ARTWORKS = [
-  { id: 1, title: "Marea de Ocre", category: "Abstracto", size: "100x140 cm — Marco de Roble", price: "$185.000", seed: "marea-ocre", tall: true },
-  { id: 2, title: "Follaje Suspendido", category: "Botánico", size: "60x80 cm — Marco de Nogal", price: "$96.000", seed: "follaje-suspendido" },
-  { id: 3, title: "Veta de Sombra", category: "Óleo", size: "90x120 cm — Sin Marco", price: "$210.000", seed: "veta-sombra", tall: true },
-  { id: 4, title: "Lino Crudo", category: "Textura Minimalista", size: "70x70 cm — Marco Flotante", price: "$78.000", seed: "lino-crudo" },
-  { id: 5, title: "Bruma de Sena", category: "Abstracto", size: "80x100 cm — Marco de Roble", price: "$142.000", seed: "bruma-sena" },
-  { id: 6, title: "Jardín Cerrado", category: "Botánico", size: "100x100 cm — Marco de Nogal", price: "$168.000", seed: "jardin-cerrado", tall: true },
-  { id: 7, title: "Capas de Óxido", category: "Óleo", size: "60x90 cm — Sin Marco", price: "$124.000", seed: "capas-oxido" },
-  { id: 8, title: "Arena en Reposo", category: "Textura Minimalista", size: "80x80 cm — Marco Flotante", price: "$89.000", seed: "arena-reposo" },
-  { id: 9, title: "Corriente Índigo", category: "Abstracto", size: "110x140 cm — Marco de Roble", price: "$198.000", seed: "corriente-indigo", tall: true },
-  { id: 10, title: "Hoja de Musgo", category: "Botánico", size: "50x70 cm — Marco de Nogal", price: "$72.000", seed: "hoja-musgo" },
-  { id: 11, title: "Pigmento Crudo", category: "Óleo", size: "100x130 cm — Sin Marco", price: "$220.000", seed: "pigmento-crudo", tall: true },
-  { id: 12, title: "Piedra Pulida", category: "Textura Minimalista", size: "60x60 cm — Marco Flotante", price: "$64.000", seed: "piedra-pulida" },
+  { id: 1, title: "Cuadro 1", category: "Abstracto", size: "100x140 cm", price: "$185.000", seed: "cuadro-1", tall: true, image: `${RAW_BASE}/Cuadro%201.JPG`, imagePosition: "50% 36%" },
+  { id: 2, title: "Cuadro 2", category: "Botánico", size: "60x80 cm", price: "$96.000", seed: "cuadro-2", image: `${RAW_BASE}/Cuadro%202.JPG`, imagePosition: "50% 52%" },
+  { id: 3, title: "Cuadro 3", category: "Óleo", size: "90x120 cm", price: "$210.000", seed: "cuadro-3", tall: true, image: `${RAW_BASE}/Cuadro%203.JPG`, imagePosition: "50% 44%" },
+  { id: 4, title: "Cuadro 4", category: "Textura Minimalista", size: "70x70 cm", price: "$78.000", seed: "cuadro-4", image: `${RAW_BASE}/Cuadro%204.JPG`, imagePosition: "50% 50%" },
+  { id: 5, title: "Cuadro 5", category: "Abstracto", size: "80x100 cm", price: "$142.000", seed: "cuadro-5", image: `${RAW_BASE}/Cuadro%205.JPG`, imagePosition: "50% 52%" },
+  { id: 6, title: "Cuadro 6", category: "Botánico", size: "100x100 cm", price: "$168.000", seed: "cuadro-6", tall: true, image: `${RAW_BASE}/Cuadro%206%20Mejorado.PNG`, imagePosition: "50% 38%" },
+  { id: 7, title: "Cuadro 7", category: "Óleo", size: "60x90 cm", price: "$124.000", seed: "cuadro-7", image: `${RAW_BASE}/Cuadro%207%20Mejorado.jpg`, imagePosition: "50% 50%" },
+  { id: 8, title: "Cuadro 8", category: "Textura Minimalista", size: "80x80 cm", price: "$89.000", seed: "cuadro-8", image: `${RAW_BASE}/Cuadro%208.JPG`, imagePosition: "50% 50%" },
+  { id: 9, title: "Cuadro 9", category: "Abstracto", size: "110x140 cm", price: "$198.000", seed: "cuadro-9", tall: true, image: `${RAW_BASE}/Cuadro%209.JPG`, imagePosition: "50% 40%" },
+  { id: 10, title: "Cuadro 10", category: "Botánico", size: "50x70 cm", price: "$72.000", seed: "cuadro-10", tall: true, image: LOCAL_ART_ASSETS.cuadro10, imagePosition: "50% 48%" },
+  { id: 11, title: "Cuadro 11", category: "Óleo", size: "100x130 cm", price: "$220.000", seed: "cuadro-11", tall: true, image: `${RAW_BASE}/Cuadro%2011.JPG`, imagePosition: "50% 40%" },
 ];
 
 const WHATSAPP_NUMBER = "5492645059194";
@@ -108,6 +113,7 @@ function useReveal() {
 function ArtCard({ art, index }) {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
   const [hovered, setHovered] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
 
@@ -117,7 +123,10 @@ function ArtCard({ art, index }) {
     const rect = node.getBoundingClientRect();
     const px = (clientX - rect.left) / rect.width - 0.5;
     const py = (clientY - rect.top) / rect.height - 0.5;
+    const originX = ((clientX - rect.left) / rect.width) * 100;
+    const originY = ((clientY - rect.top) / rect.height) * 100;
     setTilt({ x: py * -10, y: px * 12 });
+    setZoomOrigin({ x: Math.min(100, Math.max(0, originX)), y: Math.min(100, Math.max(0, originY)) });
   }, []);
 
   const handleMove = useCallback(
@@ -181,6 +190,7 @@ function ArtCard({ art, index }) {
           onTouchCancel={reset}
           style={{
             transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${hovered ? 1.02 : 1})`,
+            transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
           }}
         >
           <img
@@ -188,6 +198,7 @@ function ArtCard({ art, index }) {
             alt={art.title}
             className={`art-card__img ${imgLoaded ? "art-card__img--loaded" : ""}`}
             loading="lazy"
+            style={{ objectPosition: art.imagePosition || "center center" }}
             onLoad={() => setImgLoaded(true)}
             onError={handleImageError}
           />
@@ -301,7 +312,15 @@ export default function App() {
     return () => clearTimeout(t);
   }, []);
 
-  const heroImage = useMemo(() => placeholderArt("hero-fifi", 900, 1100), []);
+  const heroImage = useMemo(() => LOCAL_ART_ASSETS.hero, []);
+
+  const heroImageStyle = useMemo(
+    () => ({
+      background: "radial-gradient(circle at center, rgba(255,255,255,0.85) 0%, rgba(233,224,212,0.95) 40%, rgba(233,224,212,1) 100%)",
+      backgroundBlendMode: "normal",
+    }),
+    []
+  );
 
   const filtered = useMemo(
     () =>
@@ -428,19 +447,32 @@ export default function App() {
 
         .hero__visual {
           position: relative;
+          width: min(100%, 560px);
+          margin: 0 auto;
           aspect-ratio: 4/5;
           border-radius: 3px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #e9e0d4;
+          overflow: hidden;
         }
         .hero__visual img {
           display: block;
-          width: 100%; height: 100%; object-fit: cover;
+          width: 100%; height: 100%;
+          object-fit: contain;
+          object-position: center;
+          border: none;
           border-radius: 3px;
+          padding: 0;
           box-shadow: 0 30px 60px -20px rgba(42,40,36,0.35);
+          background: transparent !important;
+          filter: drop-shadow(0 10px 18px rgba(42,40,36,0.12));
         }
         .hero__visual-frame {
           position: absolute;
           inset: 0;
-          border: 1.5px solid rgba(255,253,249,0.55);
+          border: none;
           border-radius: 3px;
           pointer-events: none;
         }
@@ -532,18 +564,23 @@ export default function App() {
         .art-card--tall .art-card__frame { aspect-ratio: 4/5.4; }
         .art-card__frame:hover { box-shadow: 0 26px 46px -16px rgba(42,40,36,0.4); }
         .art-card__img {
-          width: 100%; height: 100%; object-fit: cover;
+          width: 100%; height: 100%;
+          object-fit: contain;
+          object-position: center;
+          border: none;
+          padding: 0;
           transition: transform .5s ease, opacity .7s ease, filter .7s ease;
-          filter: saturate(0.94) contrast(1.02) blur(8px);
+          filter: saturate(1) contrast(1.04) blur(0);
           opacity: 0;
-          transform: scale(1.08);
+          transform: scale(1.02);
+          background: transparent !important;
         }
         .art-card__img--loaded {
           opacity: 1;
           filter: saturate(0.94) contrast(1.02) blur(0);
           transform: scale(1);
         }
-        .art-card__frame:hover .art-card__img--loaded { transform: scale(1.09); }
+        .art-card__frame:hover .art-card__img--loaded { transform: scale(1.16); }
         .art-card__sheen {
           position: absolute; inset: 0;
           background: linear-gradient(135deg, rgba(255,255,255,0.16), transparent 55%);
@@ -690,7 +727,7 @@ export default function App() {
           </div>
           <div
             className={`hero-anim ${loaded ? "hero-anim--in" : ""} hero__visual`}
-            style={{ transitionDelay: "150ms" }}
+            style={{ transitionDelay: "150ms", ...heroImageStyle }}
           >
             <div className="hero__visual-frame" />
             <img src={heroImage} alt="Obra destacada de la galería" />
