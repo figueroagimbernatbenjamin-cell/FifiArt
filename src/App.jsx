@@ -348,7 +348,7 @@ export default function App() {
   const filtered = useMemo(
     () =>
       activeCategory === "Todos"
-        ? ARTWORKS.slice(0, -3)
+        ? ARTWORKS
         : ARTWORKS.filter((a) => a.category === activeCategory),
     [activeCategory]
   );
