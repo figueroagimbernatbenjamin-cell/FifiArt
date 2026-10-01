@@ -416,14 +416,14 @@ Error generating stack: `+o.message+`
           transition: transform .55s ease, opacity .7s ease, filter .7s ease;
           filter: saturate(1.04) contrast(1.08) blur(0);
           opacity: 0;
-          transform: scale(1.08);
+          transform: scale(1.04);
           background: #efe9df !important;
           box-shadow: inset 0 0 0 1px rgba(42,40,36,0.04);
         }
         .art-card__img--loaded {
           opacity: 1;
           filter: saturate(0.96) contrast(1.02) blur(0);
-          transform: scale(1);
+          transform: scale(1.04);
         }
         .art-card__frame:hover .art-card__img--loaded { transform: scale(1.12); }
         .art-card__sheen {
