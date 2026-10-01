@@ -149,24 +149,7 @@ function ArtCard({ art, index, onCategoryClick }) {
     [applyTiltFromPoint]
   );
 
-  const handleTouchStart = useCallback(
-    (e) => {
-      e.preventDefault();
-      setHovered(true);
-      const t = e.touches[0];
-      if (t) applyTiltFromPoint(t.clientX, t.clientY);
-    },
-    [applyTiltFromPoint]
-  );
-
-  const handleTouchMove = useCallback(
-    (e) => {
-      e.preventDefault();
-      const t = e.touches[0];
-      if (t) applyTiltFromPoint(t.clientX, t.clientY);
-    },
-    [applyTiltFromPoint]
-  );
+  const handleTouchStart = useCallback(() => setHovered(true), []);
 
   const reset = useCallback(() => {
     setTilt({ x: 0, y: 0 });
@@ -204,7 +187,6 @@ function ArtCard({ art, index, onCategoryClick }) {
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={reset}
           onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
           onTouchEnd={reset}
           onTouchCancel={reset}
           style={{
@@ -253,10 +235,12 @@ function ArtCard({ art, index, onCategoryClick }) {
         >
           {art.category}
         </button>
-        <p className="art-card__size">
-          <Ruler size={13} strokeWidth={1.6} />
-          {art.size}
-        </p>
+        {art.size && (
+          <p className="art-card__size">
+            <Ruler size={13} strokeWidth={1.6} />
+            {art.size}
+          </p>
+        )}
         <p className="art-card__price">{art.sold ? "Vendido" : art.price}</p>
       </div>
     </div>
@@ -312,7 +296,7 @@ function ChatWidget() {
       <button
         className={`chat-widget__bubble-btn ${open ? "chat-widget__bubble-btn--active" : ""}`}
         onClick={() => setOpen((v) => !v)}
-        aria-label="Abrir chat de WhatsApp"
+        aria-label={open ? "Cerrar chat de WhatsApp" : "Abrir chat de WhatsApp"}
       >
         <span className="chat-widget__pulse" />
         {open ? <X size={26} /> : <WhatsAppIcon size={28} />}
@@ -668,6 +652,7 @@ export default function App() {
           position: relative;
           border-radius: 12px;
           overflow: hidden;
+          touch-action: pan-y;
           aspect-ratio: 4/5;
           padding: 10px;
           background: linear-gradient(145deg, rgba(255,255,255,0.38), rgba(106,92,72,0.12));
@@ -799,6 +784,8 @@ export default function App() {
           -webkit-tap-highlight-color: transparent;
         }
         .chat-widget__bubble-btn--active { background: var(--graphite); animation: none; }
+        .chat-widget__bubble-btn:hover,
+        .chat-widget__bubble-btn:focus-visible { animation-play-state: paused; }
         @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         .chat-widget__pulse {
           position: absolute; inset: -6px;
@@ -864,6 +851,7 @@ export default function App() {
         }
         @media (max-width: 640px) { .footer { flex-direction: column; gap: 10px; text-align: center; } }
         @media (hover: none), (pointer: coarse) {
+          .chat-widget__bubble-btn { animation: none; }
           .art-card__frame,
           .art-card__frame:hover,
           .art-card__quick-wa,
@@ -877,6 +865,17 @@ export default function App() {
           }
           .art-card__img {
             transform: scale(1);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .gallery-root *,
+          .gallery-root *::before,
+          .gallery-root *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            scroll-behavior: auto !important;
+            transition-duration: 0.01ms !important;
           }
         }
       `}</style>
