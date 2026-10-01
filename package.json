@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
-    "preview": "vite preview --host",
-    "deploy": "gh-pages -d dist"
+    "dev": "cp index.template.html index.html && vite --host",
+    "prebuild": "cp index.template.html index.html",
+    "build": "vite build && cp dist/index.html index.html && rsync -a --delete dist/assets/ assets/",
+    "preview": "vite preview --host"
   },
   "dependencies": {
     "lucide-react": "^0.542.0",

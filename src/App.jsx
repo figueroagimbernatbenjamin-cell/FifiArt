@@ -22,11 +22,6 @@ function placeholderArt(seed, w = 700, h = 900) {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
-const LOCAL_ART_ASSETS = {
-  hero: new URL("./assets/hero-fifi-fixed.png", import.meta.url).href,
-  cuadro10: new URL("./assets/cuadro10-fixed.png", import.meta.url).href,
-};
-
 const REAL_ART_IMAGES = {
   1: new URL("../Cuadro 1.JPG", import.meta.url).href,
   2: new URL("../Cuadro 2.JPG", import.meta.url).href,
@@ -340,15 +335,7 @@ export default function App() {
     return () => clearTimeout(t);
   }, []);
 
-  const heroImage = useMemo(() => LOCAL_ART_ASSETS.hero, []);
-
-  const heroImageStyle = useMemo(
-    () => ({
-      background: "radial-gradient(circle at center, rgba(255,255,255,0.85) 0%, rgba(233,224,212,0.95) 40%, rgba(233,224,212,1) 100%)",
-      backgroundBlendMode: "normal",
-    }),
-    []
-  );
+  const featuredWorks = ARTWORKS.slice(-3);
 
   const filtered = useMemo(
     () =>
@@ -490,18 +477,18 @@ export default function App() {
 
         .hero {
           display: grid;
-          grid-template-columns: 1.1fr 0.9fr;
-          gap: 3rem;
+          grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+          gap: clamp(2rem, 5vw, 5rem);
           align-items: center;
-          padding: 4vh 6vw 8vh;
-          min-height: 72vh;
+          padding: 3vh 6vw 6vh;
+          min-height: min(780px, calc(100vh - 76px));
         }
         @media (max-width: 860px) {
           .hero {
             grid-template-columns: 1fr;
             padding: 3vh 6vw 5vh;
             min-height: auto;
-            gap: 2.2rem;
+            gap: 1.8rem;
           }
         }
         @media (max-width: 480px) {
@@ -509,10 +496,7 @@ export default function App() {
             padding: 1.6vh 5vw 3vh;
             gap: 1.2rem;
           }
-          .hero__visual {
-            width: min(100%, 360px);
-            aspect-ratio: 4/4.3;
-          }
+          .hero__portfolio { height: min(76vw, 360px); }
           .hero__eyebrow-free {
             margin-bottom: 0.5rem;
             font-size: 0.8rem;
@@ -556,36 +540,60 @@ export default function App() {
         }
         @keyframes strokeGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-        .hero__visual {
+        .hero__portfolio {
           position: relative;
-          width: min(100%, 560px);
+          width: 100%;
           margin: 0 auto;
-          aspect-ratio: 4/5;
-          border-radius: 3px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #e9e0d4;
+          height: clamp(420px, 62vh, 650px);
+          display: grid;
+          grid-template-columns: 1.05fr 0.9fr;
+          grid-template-rows: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+        }
+        .hero__piece {
+          position: relative;
+          min-width: 0;
+          min-height: 0;
           overflow: hidden;
+          background: #e8e0d3;
+          animation: cardIn .8s cubic-bezier(.22,1,.36,1) both;
         }
-        .hero__visual img {
+        .hero__piece--feature { grid-row: 1 / span 2; }
+        .hero__piece img {
           display: block;
-          width: 100%; height: 100%;
-          object-fit: cover;
-          object-position: center;
-          border: none;
-          border-radius: 3px;
-          padding: 0;
-          box-shadow: 0 30px 60px -20px rgba(42,40,36,0.35);
-          background: #efe9df !important;
-          filter: drop-shadow(0 10px 18px rgba(42,40,36,0.12));
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          transition: transform .6s cubic-bezier(.22,1,.36,1);
         }
-        .hero__visual-frame {
+        .hero__piece:hover img { transform: scale(1.035); }
+        .hero__piece figcaption {
           position: absolute;
-          inset: 0;
-          border: none;
-          border-radius: 3px;
-          pointer-events: none;
+          inset: auto 0 0;
+          padding: 2rem 0.9rem 0.75rem;
+          color: white;
+          background: linear-gradient(transparent, rgba(30,28,24,.72));
+          font-family: 'Fraunces', serif;
+          font-size: 0.95rem;
+        }
+        .hero__cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.55rem;
+          margin-top: 1.7rem;
+          padding: 0.8rem 1.1rem;
+          border: 0;
+          background: #3d8f5b;
+          color: white;
+          font: 500 0.9rem 'Work Sans', sans-serif;
+          cursor: pointer;
+          transition: background .2s ease, transform .2s ease;
+        }
+        .hero__cta:hover { background: #347a4c; transform: translateY(-2px); }
+        .hero__meta {
+          margin-top: 1rem;
+          color: var(--sage);
+          font-size: 0.82rem;
         }
 
         .hero-anim { opacity: 0; transform: translateY(22px); transition: opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1); }
@@ -912,21 +920,29 @@ export default function App() {
 
         <header className="hero">
           <div className={`hero-anim ${loaded ? "hero-anim--in" : ""}`}>
-            <p className="hero__eyebrow-free">Cuadros para vestir tus paredes</p>
+            <p className="hero__eyebrow-free">Portfolio de arte · San Juan</p>
             <h1 className="hero__title">FIFI</h1>
             <div className="hero__stroke" />
             <p className="hero__desc">
-              Piezas originales y de edición limitada, elegidas para transformar un muro en el
-              punto de partida de un ambiente. Consultá por WhatsApp las opciones de enmarcado
-              para cada obra.
+              Obras originales hechas para transformar espacios. Explorá la colección y consultá
+              por disponibilidad, medidas y enmarcado.
             </p>
+            <button type="button" className="hero__cta" onClick={scrollToGallery}>
+              Ver todas las obras <ArrowUpRight size={17} />
+            </button>
+            <p className="hero__meta">14 obras originales · piezas disponibles y vendidas</p>
           </div>
-          <div
-            className={`hero-anim ${loaded ? "hero-anim--in" : ""} hero__visual`}
-            style={{ transitionDelay: "150ms", ...heroImageStyle }}
-          >
-            <div className="hero__visual-frame" />
-            <img src={heroImage} alt="Obra destacada de la galería" />
+          <div className="hero__portfolio" aria-label="Obras destacadas del portfolio">
+            {featuredWorks.map((art, index) => (
+              <figure
+                key={art.id}
+                className={`hero__piece ${index === 0 ? "hero__piece--feature" : ""}`}
+                style={{ animationDelay: `${150 + index * 100}ms` }}
+              >
+                <img src={art.image} alt={`${art.title}, obra original de FIFI`} />
+                <figcaption>{art.title}</figcaption>
+              </figure>
+            ))}
           </div>
         </header>
 
