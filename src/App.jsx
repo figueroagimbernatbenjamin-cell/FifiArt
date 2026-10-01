@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { MessageCircle, X, Send, ArrowUpRight, Ruler } from "lucide-react";
 
-const CATEGORIES = ["Todos", "Abstracto", "Botánico", "Óleo", "Textura Minimalista"];
+const CATEGORIES = ["Todos", "Abstracto", "Botánico", "Textura Minimalista"];
 
 function hashSeed(str) {
   let h = 0;
@@ -42,18 +42,18 @@ const REAL_ART_IMAGES = {
 const ARTWORKS = [
   { id: 1, title: "Cuadro 1", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-1", tall: true, image: REAL_ART_IMAGES[1], imagePosition: "50% 36%", sold: true },
   { id: 2, title: "Cuadro 2", category: "Botánico", size: "90x80 cm", price: "$250.000", seed: "cuadro-2", image: REAL_ART_IMAGES[2], imagePosition: "50% 52%", sold: false },
-  { id: 3, title: "Cuadro 3", category: "Óleo", size: "", price: "Vendido", seed: "cuadro-3", tall: true, image: REAL_ART_IMAGES[3], imagePosition: "50% 44%", sold: true },
+  { id: 3, title: "Cuadro 3", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-3", tall: true, image: REAL_ART_IMAGES[3], imagePosition: "50% 44%", sold: true },
   { id: 4, title: "Cuadro 4", category: "Textura Minimalista", size: "90x70 cm", price: "$280.000", seed: "cuadro-4", image: REAL_ART_IMAGES[4], imagePosition: "50% 50%", sold: false },
   { id: 5, title: "Cuadro 5", category: "Abstracto", size: "1,10 x 90 cm", price: "$350.000", seed: "cuadro-5", image: REAL_ART_IMAGES[5], imagePosition: "50% 52%", sold: false },
   { id: 6, title: "Cuadro 6", category: "Botánico", size: "", price: "Vendido", seed: "cuadro-6", tall: true, image: REAL_ART_IMAGES[6], imagePosition: "50% 38%", sold: true },
-  { id: 7, title: "Cuadro 7", category: "Óleo", size: "", price: "Vendido", seed: "cuadro-7", image: REAL_ART_IMAGES[7], imagePosition: "50% 50%", sold: true },
+  { id: 7, title: "Cuadro 7", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-7", image: REAL_ART_IMAGES[7], imagePosition: "50% 50%", sold: true },
   { id: 8, title: "Cuadro 8", category: "Textura Minimalista", size: "", price: "Vendido", seed: "cuadro-8", image: REAL_ART_IMAGES[8], imagePosition: "50% 50%", sold: true },
   { id: 9, title: "Cuadro 9", category: "Abstracto", size: "1,30 x 90 cm", price: "Vendido", seed: "cuadro-9", tall: true, image: REAL_ART_IMAGES[9], imagePosition: "50% 40%", sold: true },
   { id: 10, title: "Cuadro 10", category: "Botánico", size: "70x90 cm", price: "$260.000", seed: "cuadro-10", tall: true, image: REAL_ART_IMAGES[10], imagePosition: "50% 48%", sold: false },
-  { id: 11, title: "Cuadro 11", category: "Óleo", size: "", price: "Vendido", seed: "cuadro-11", tall: true, image: REAL_ART_IMAGES[11], imagePosition: "50% 40%", sold: true },
-  { id: 12, title: "Cuadro 12", category: "Botánico", size: "50x60 cm", price: "$260.000", seed: "cuadro-12", image: REAL_ART_IMAGES[12], imagePosition: "50% 50%", sold: false },
-  { id: 13, title: "Cuadro 13", category: "Abstracto", size: "50x65 cm", price: "$200.000", seed: "cuadro-13", image: REAL_ART_IMAGES[13], imagePosition: "50% 50%", sold: false },
-  { id: 14, title: "Cuadro 14", category: "Óleo", size: "60x90 cm", price: "$280.000", seed: "cuadro-14", tall: true, image: REAL_ART_IMAGES[14], imagePosition: "50% 50%", sold: false },
+  { id: 11, title: "Cuadro 11", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-11", tall: true, image: REAL_ART_IMAGES[11], imagePosition: "50% 40%", sold: true },
+  { id: 12, title: "Cuadro 12", category: "Botánico", size: "50x60 cm", price: "$260.000", seed: "cuadro-12", tall: true, image: REAL_ART_IMAGES[12], imagePosition: "50% 50%", sold: false },
+  { id: 13, title: "Cuadro 13", category: "Abstracto", size: "50x65 cm", price: "$200.000", seed: "cuadro-13", tall: true, image: REAL_ART_IMAGES[13], imagePosition: "50% 50%", sold: false },
+  { id: 14, title: "Cuadro 14", category: "Abstracto", size: "60x90 cm", price: "$280.000", seed: "cuadro-14", tall: true, image: REAL_ART_IMAGES[14], imagePosition: "50% 50%", sold: false },
 ];
 
 const WHATSAPP_NUMBER = "5492645059194";
@@ -125,7 +125,7 @@ function useReveal() {
   return [ref, visible];
 }
 
-function ArtCard({ art, index }) {
+function ArtCard({ art, index, onCategoryClick }) {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
@@ -245,6 +245,14 @@ function ArtCard({ art, index }) {
 
       <div className="art-card__info">
         <h3>{art.title}</h3>
+        <button
+          type="button"
+          className="art-card__category"
+          aria-label={`Ver obras de la categoría ${art.category}`}
+          onClick={() => onCategoryClick(art.category)}
+        >
+          {art.category}
+        </button>
         <p className="art-card__size">
           <Ruler size={13} strokeWidth={1.6} />
           {art.size}
@@ -340,7 +348,7 @@ export default function App() {
   const filtered = useMemo(
     () =>
       activeCategory === "Todos"
-        ? ARTWORKS
+        ? ARTWORKS.slice(0, -3)
         : ARTWORKS.filter((a) => a.category === activeCategory),
     [activeCategory]
   );
@@ -496,7 +504,10 @@ export default function App() {
             padding: 1.6vh 5vw 3vh;
             gap: 1.2rem;
           }
-          .hero__portfolio { height: min(76vw, 360px); }
+          .hero__portfolio {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.8rem;
+          }
           .hero__eyebrow-free {
             margin-bottom: 0.5rem;
             font-size: 0.8rem;
@@ -541,40 +552,10 @@ export default function App() {
         @keyframes strokeGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
         .hero__portfolio {
-          position: relative;
-          width: 100%;
-          margin: 0 auto;
-          height: clamp(420px, 62vh, 650px);
           display: grid;
-          grid-template-columns: 1.05fr 0.9fr;
-          grid-template-rows: repeat(2, minmax(0, 1fr));
-          gap: 12px;
-        }
-        .hero__piece {
-          position: relative;
-          min-width: 0;
-          min-height: 0;
-          overflow: hidden;
-          background: #e8e0d3;
-          animation: cardIn .8s cubic-bezier(.22,1,.36,1) both;
-        }
-        .hero__piece--feature { grid-row: 1 / span 2; }
-        .hero__piece img {
-          display: block;
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          transition: transform .6s cubic-bezier(.22,1,.36,1);
-        }
-        .hero__piece:hover img { transform: scale(1.035); }
-        .hero__piece figcaption {
-          position: absolute;
-          inset: auto 0 0;
-          padding: 2rem 0.9rem 0.75rem;
-          color: white;
-          background: linear-gradient(transparent, rgba(30,28,24,.72));
-          font-family: 'Fraunces', serif;
-          font-size: 0.95rem;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          align-items: start;
+          gap: 1rem;
         }
         .hero__cta {
           display: inline-flex;
@@ -760,8 +741,20 @@ export default function App() {
             right: 10px;
           }
         }
-        .art-card__info { padding-top: 0.85rem; }
+        .art-card__info { padding-top: 0.35rem; }
         .art-card__info h3 { font-size: 1.05rem; font-weight: 500; }
+        .art-card__category {
+          display: block;
+          border: 0;
+          padding: 0;
+          margin: 0.12rem 0 0.2rem;
+          background: transparent;
+          color: var(--sage);
+          font: 500 0.72rem 'Work Sans', sans-serif;
+          text-align: left;
+          cursor: pointer;
+        }
+        .art-card__category:hover { text-decoration: underline; }
         .art-card__size {
           display: flex; align-items: center; gap: 5px;
           font-size: 0.82rem; color: #6b675d; margin: 0.35rem 0;
@@ -932,18 +925,18 @@ export default function App() {
             </button>
             <p className="hero__meta">14 obras originales · piezas disponibles y vendidas</p>
           </div>
-          <div className="hero__portfolio" aria-label="Obras destacadas del portfolio">
-            {featuredWorks.map((art, index) => (
-              <figure
-                key={art.id}
-                className={`hero__piece ${index === 0 ? "hero__piece--feature" : ""}`}
-                style={{ animationDelay: `${150 + index * 100}ms` }}
-              >
-                <img src={art.image} alt={`${art.title}, obra original de FIFI`} />
-                <figcaption>{art.title}</figcaption>
-              </figure>
-            ))}
-          </div>
+          {activeCategory === "Todos" && (
+            <div className="hero__portfolio" aria-label="Obras destacadas del portfolio">
+              {featuredWorks.map((art, index) => (
+                <ArtCard
+                  key={art.id}
+                  art={art}
+                  index={index}
+                  onCategoryClick={handleCategoryClick}
+                />
+              ))}
+            </div>
+          )}
         </header>
 
         <Reveal>
@@ -964,8 +957,13 @@ export default function App() {
 
         <Reveal>
           <div id="galeria" className="art-grid" key={activeCategory}>
-            {filtered.map((art, i) => (
-              <ArtCard key={art.id} art={art} index={i} />
+            {filtered.map((art, index) => (
+              <ArtCard
+                key={art.id}
+                art={art}
+                index={index}
+                onCategoryClick={handleCategoryClick}
+              />
             ))}
           </div>
         </Reveal>
