@@ -125,7 +125,7 @@ function useReveal() {
   return [ref, visible];
 }
 
-function ArtCard({ art, index, onCategoryClick }) {
+function ArtCard({ art, index, onCategoryClick, onImageClick }) {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
@@ -189,6 +189,16 @@ function ArtCard({ art, index, onCategoryClick }) {
           onTouchStart={handleTouchStart}
           onTouchEnd={reset}
           onTouchCancel={reset}
+          onClick={() => onImageClick(art)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onImageClick(art);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label={`Ampliar imagen de ${art.title}`}
           style={{
             transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${hovered ? 1.02 : 1})`,
             transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
@@ -317,6 +327,8 @@ function Reveal({ children, className = "" }) {
 export default function App() {
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [loaded, setLoaded] = useState(false);
+  const [selectedArtwork, setSelectedArtwork] = useState(null);
+  const zoomCloseRef = useRef(null);
 
   useEffect(() => {
     document.title = "FIFI | Galería de Arte";
@@ -326,6 +338,25 @@ export default function App() {
     const t = setTimeout(() => setLoaded(true), 80);
     return () => clearTimeout(t);
   }, []);
+
+  useEffect(() => {
+    if (!selectedArtwork) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previouslyFocused = document.activeElement;
+    document.body.style.overflow = "hidden";
+    zoomCloseRef.current?.focus();
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setSelectedArtwork(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedArtwork]);
 
   const featuredWorks = ARTWORKS.slice(-3);
 
@@ -338,6 +369,7 @@ export default function App() {
   );
 
   const handleCategoryClick = useCallback((category) => setActiveCategory(category), []);
+  const handleImageClick = useCallback((art) => setSelectedArtwork(art), []);
 
   const scrollToGallery = useCallback(() => {
     const gallery = document.getElementById("galeria");
@@ -660,6 +692,11 @@ export default function App() {
           box-shadow: 0 18px 36px -18px rgba(42,40,36,0.32), inset 0 0 0 1px rgba(255,255,255,0.3);
           transition: transform .25s ease-out, box-shadow .3s ease;
           will-change: transform;
+          cursor: zoom-in;
+        }
+        .art-card__frame:focus-visible {
+          outline: 2px solid rgba(168,112,60,0.8);
+          outline-offset: 3px;
         }
         .art-card--tall .art-card__frame { aspect-ratio: 4/5.4; }
         .art-card__frame:hover { box-shadow: 0 30px 52px -20px rgba(42,40,36,0.42), inset 0 0 0 1px rgba(255,255,255,0.35); }
@@ -693,6 +730,91 @@ export default function App() {
           transform: scale(1.04);
         }
         .art-card__frame:hover .art-card__img--loaded { transform: scale(1.12); }
+        .artwork-zoom {
+          --graphite: #2a2824;
+          position: fixed;
+          inset: 0;
+          z-index: 100;
+          display: grid;
+          place-items: center;
+          padding: 24px;
+          background: rgba(30,29,27,0.36);
+          -webkit-backdrop-filter: blur(12px) saturate(0.82);
+          backdrop-filter: blur(12px) saturate(0.82);
+          animation: artworkZoomBackdrop .28s ease both;
+        }
+        .artwork-zoom__panel {
+          position: relative;
+          width: fit-content;
+          max-width: min(88vw, 720px);
+          max-height: 88vh;
+          padding: 12px;
+          border: 1px solid rgba(255,255,255,0.62);
+          border-radius: 22px;
+          background: rgba(255,253,249,0.94);
+          box-shadow: 0 32px 100px rgba(25,23,20,0.3), 0 8px 24px rgba(25,23,20,0.12);
+          animation: artworkZoomIn .42s cubic-bezier(.22,1,.36,1) both;
+        }
+        .artwork-zoom__image {
+          display: block;
+          width: min(82vw, 640px);
+          height: min(78vh, 800px);
+          object-fit: contain;
+          object-position: center;
+          border-radius: 14px;
+          background: #eee8de;
+        }
+        .artwork-zoom__caption {
+          margin: 11px 42px 1px 3px;
+          color: var(--graphite);
+          font: 500 0.9rem 'Work Sans', sans-serif;
+        }
+        .artwork-zoom__close {
+          position: absolute;
+          top: 18px;
+          right: 18px;
+          z-index: 1;
+          display: grid;
+          place-items: center;
+          width: 38px;
+          height: 38px;
+          padding: 0;
+          border: 1px solid rgba(42,40,36,0.08);
+          border-radius: 50%;
+          background: rgba(255,253,249,0.92);
+          color: var(--graphite);
+          cursor: pointer;
+          box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+          transition: transform .2s ease, background .2s ease;
+        }
+        .artwork-zoom__close:hover {
+          transform: scale(1.06);
+          background: #fff;
+        }
+        @keyframes artworkZoomBackdrop {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes artworkZoomIn {
+          from { opacity: 0; transform: translateY(12px) scale(0.96); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @media (max-width: 600px) {
+          .artwork-zoom { padding: 16px; }
+          .artwork-zoom__panel {
+            max-width: 90vw;
+            max-height: 86vh;
+            padding: 9px;
+            border-radius: 18px;
+          }
+          .artwork-zoom__image {
+            width: min(86vw, 520px);
+            height: min(72vh, 660px);
+            border-radius: 12px;
+          }
+          .artwork-zoom__close { top: 13px; right: 13px; width: 36px; height: 36px; }
+          .artwork-zoom__caption { margin-top: 9px; font-size: 0.84rem; }
+        }
         .art-card__sheen {
           position: absolute; inset: 0;
           background: linear-gradient(135deg, rgba(255,255,255,0.16), transparent 55%);
@@ -877,6 +999,12 @@ export default function App() {
             scroll-behavior: auto !important;
             transition-duration: 0.01ms !important;
           }
+          .artwork-zoom,
+          .artwork-zoom__panel,
+          .artwork-zoom__close {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+          }
         }
       `}</style>
 
@@ -932,6 +1060,7 @@ export default function App() {
                   art={art}
                   index={index}
                   onCategoryClick={handleCategoryClick}
+                  onImageClick={handleImageClick}
                 />
               ))}
             </div>
@@ -962,6 +1091,7 @@ export default function App() {
                 art={art}
                 index={index}
                 onCategoryClick={handleCategoryClick}
+                onImageClick={handleImageClick}
               />
             ))}
           </div>
@@ -976,6 +1106,38 @@ export default function App() {
       </div>
 
       <ChatWidget />
+      {selectedArtwork && (
+        <div
+          className="artwork-zoom"
+          role="presentation"
+          onClick={() => setSelectedArtwork(null)}
+        >
+          <div
+            className="artwork-zoom__panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Vista ampliada de ${selectedArtwork.title}`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="artwork-zoom__close"
+              ref={zoomCloseRef}
+              onClick={() => setSelectedArtwork(null)}
+              aria-label="Cerrar imagen ampliada"
+            >
+              <X size={19} />
+            </button>
+            <img
+              className="artwork-zoom__image"
+              src={selectedArtwork.image || placeholderArt(selectedArtwork.seed, 700, selectedArtwork.tall ? 900 : 700)}
+              alt={selectedArtwork.title}
+              style={{ objectPosition: selectedArtwork.imagePosition || "center center" }}
+            />
+            <p className="artwork-zoom__caption">{selectedArtwork.title}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
