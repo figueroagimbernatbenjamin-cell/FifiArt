@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { MessageCircle, X, Send, ArrowUpRight, Ruler } from "lucide-react";
+import logoFifi from "./assets/fifi-logo.png";
 
 const CATEGORIES = ["Todos", "Abstracto", "Botánico", "Textura Minimalista"];
 
@@ -556,6 +557,13 @@ export default function App() {
           font-optical-sizing: auto;
           color: var(--graphite);
         }
+        .hero__logo {
+          display: block;
+          height: 1em;
+          width: auto;
+          max-width: 100%;
+          object-fit: contain;
+        }
         .hero__desc {
           margin-top: 1.6rem;
           font-size: 1.05rem;
@@ -1070,7 +1078,9 @@ export default function App() {
         <header className="hero">
           <div className={`hero-anim ${loaded ? "hero-anim--in" : ""}`}>
             <p className="hero__eyebrow-free">Portfolio de arte · San Juan</p>
-            <h1 className="hero__title">FIFI</h1>
+            <h1 className="hero__title">
+              <img className="hero__logo" src={logoFifi} alt="FIFI" />
+            </h1>
             <div className="hero__stroke" />
             <p className="hero__desc">
               Obras originales hechas para transformar espacios. Explorá la colección y consultá
