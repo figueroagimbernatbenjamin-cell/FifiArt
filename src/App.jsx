@@ -41,19 +41,19 @@ const REAL_ART_IMAGES = {
 
 const ARTWORKS = [
   { id: 1, title: "Cuadro 1", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-1", tall: true, image: REAL_ART_IMAGES[1], imagePosition: "50% 36%", sold: true },
-  { id: 2, title: "Cuadro 2", category: "Botánico", size: "90x80 cm", price: "$250.000", seed: "cuadro-2", image: REAL_ART_IMAGES[2], imagePosition: "50% 52%", sold: false },
+  { id: 2, title: "Cuadro 2", category: "Botánico", size: "90x80 cm", previousPrice: "$250.000", price: "$225.000", seed: "cuadro-2", image: REAL_ART_IMAGES[2], imagePosition: "50% 52%", sold: false },
   { id: 3, title: "Cuadro 3", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-3", tall: true, image: REAL_ART_IMAGES[3], imagePosition: "50% 44%", sold: true },
-  { id: 4, title: "Cuadro 4", category: "Textura Minimalista", size: "90x70 cm", price: "$280.000", seed: "cuadro-4", image: REAL_ART_IMAGES[4], imagePosition: "50% 50%", sold: false },
-  { id: 5, title: "Cuadro 5", category: "Abstracto", size: "1,10 x 90 cm", price: "$350.000", seed: "cuadro-5", image: REAL_ART_IMAGES[5], imagePosition: "50% 52%", sold: false },
+  { id: 4, title: "Cuadro 4", category: "Textura Minimalista", size: "90x70 cm", previousPrice: "$280.000", price: "$252.000", seed: "cuadro-4", image: REAL_ART_IMAGES[4], imagePosition: "50% 50%", sold: false },
+  { id: 5, title: "Cuadro 5", category: "Abstracto", size: "1,10 x 90 cm", previousPrice: "$350.000", price: "$315.000", seed: "cuadro-5", image: REAL_ART_IMAGES[5], imagePosition: "50% 52%", sold: false },
   { id: 6, title: "Cuadro 6", category: "Botánico", size: "", price: "Vendido", seed: "cuadro-6", tall: true, image: REAL_ART_IMAGES[6], imagePosition: "50% 38%", sold: true },
   { id: 7, title: "Cuadro 7", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-7", image: REAL_ART_IMAGES[7], imagePosition: "50% 50%", sold: true },
   { id: 8, title: "Cuadro 8", category: "Textura Minimalista", size: "", price: "Vendido", seed: "cuadro-8", image: REAL_ART_IMAGES[8], imagePosition: "50% 50%", sold: true },
   { id: 9, title: "Cuadro 9", category: "Abstracto", size: "1,30 x 90 cm", price: "Vendido", seed: "cuadro-9", tall: true, image: REAL_ART_IMAGES[9], imagePosition: "50% 40%", sold: true },
-  { id: 10, title: "Cuadro 10", category: "Botánico", size: "70x90 cm", price: "$260.000", seed: "cuadro-10", tall: true, image: REAL_ART_IMAGES[10], imagePosition: "50% 48%", sold: false },
+  { id: 10, title: "Cuadro 10", category: "Botánico", size: "70x90 cm", previousPrice: "$260.000", price: "$234.000", seed: "cuadro-10", tall: true, image: REAL_ART_IMAGES[10], imagePosition: "50% 48%", sold: false },
   { id: 11, title: "Cuadro 11", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-11", tall: true, image: REAL_ART_IMAGES[11], imagePosition: "50% 40%", sold: true },
-  { id: 12, title: "Cuadro 12", category: "Botánico", size: "50x60 cm", price: "$260.000", seed: "cuadro-12", tall: true, image: REAL_ART_IMAGES[12], imagePosition: "50% 50%", sold: false },
-  { id: 13, title: "Cuadro 13", category: "Abstracto", size: "50x65 cm", price: "$200.000", seed: "cuadro-13", tall: true, image: REAL_ART_IMAGES[13], imagePosition: "50% 50%", sold: false },
-  { id: 14, title: "Cuadro 14", category: "Abstracto", size: "60x90 cm", price: "$280.000", seed: "cuadro-14", tall: true, image: REAL_ART_IMAGES[14], imagePosition: "50% 50%", sold: false },
+  { id: 12, title: "Cuadro 12", category: "Botánico", size: "50x60 cm", previousPrice: "$260.000", price: "$234.000", seed: "cuadro-12", tall: true, image: REAL_ART_IMAGES[12], imagePosition: "50% 50%", sold: false },
+  { id: 13, title: "Cuadro 13", category: "Abstracto", size: "50x65 cm", previousPrice: "$200.000", price: "$180.000", seed: "cuadro-13", tall: true, image: REAL_ART_IMAGES[13], imagePosition: "50% 50%", sold: false },
+  { id: 14, title: "Cuadro 14", category: "Abstracto", size: "60x90 cm", previousPrice: "$280.000", price: "$252.000", seed: "cuadro-14", image: REAL_ART_IMAGES[14], imagePosition: "50% 50%", sold: false },
 ];
 
 const WHATSAPP_NUMBER = "5492645059194";
@@ -251,7 +251,20 @@ function ArtCard({ art, index, onCategoryClick, onImageClick }) {
             {art.size}
           </p>
         )}
-        <p className="art-card__price">{art.sold ? "Vendido" : art.price}</p>
+        <p className="art-card__price">
+          {art.sold ? (
+            "Vendido"
+          ) : (
+            <>
+              {art.previousPrice && (
+                <span className="art-card__previous-price">
+                  Antes: <del>{art.previousPrice}</del>
+                </span>
+              )}
+              <span className="art-card__current-price">{art.price}</span>
+            </>
+          )}
+        </p>
       </div>
     </div>
   );
@@ -867,6 +880,24 @@ export default function App() {
           font-size: 0.82rem; color: #6b675d; margin: 0.35rem 0;
         }
         .art-card__price { font-size: 0.92rem; color: var(--ochre); margin: 0; }
+        .art-card__previous-price {
+          display: block;
+          margin-bottom: 0.08rem;
+          color: #777166;
+          font-size: 0.76rem;
+          line-height: 1.25;
+        }
+        .art-card__current-price {
+          display: block;
+          color: var(--ochre);
+          font-size: 1.08rem;
+          font-weight: 600;
+          line-height: 1.25;
+        }
+        @media (max-width: 480px) {
+          .art-card__previous-price { font-size: 0.68rem; }
+          .art-card__current-price { font-size: 0.94rem; }
+        }
 
         .chat-widget {
           position: fixed;
