@@ -519,7 +519,7 @@ export default function App() {
           padding: 3vh 6vw 6vh;
           min-height: min(780px, calc(100vh - 76px));
         }
-        @media (max-width: 860px) {
+        @media (max-width: 760px) {
           .hero {
             grid-template-columns: 1fr;
             padding: 3vh 6vw 5vh;
