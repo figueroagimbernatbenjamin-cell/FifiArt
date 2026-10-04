@@ -60,35 +60,8 @@ const ARTWORKS = [
 const WHATSAPP_NUMBER = "5492645059194";
 
 function buildWhatsAppUrl(text = "") {
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  );
-
-  const baseUrl = isMobile
-    ? `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}`
-    : `https://wa.me/${WHATSAPP_NUMBER}`;
-
-  if (!text) return baseUrl;
-
-  const encodedText = encodeURIComponent(text);
-  return isMobile ? `${baseUrl}&text=${encodedText}` : `${baseUrl}?text=${encodedText}`;
-}
-
-function openWhatsApp(text = "Hola! Vi la galería online y quisiera hacer una consulta.") {
-  const url = buildWhatsAppUrl(text);
-
-  try {
-    const popup = window.open(url, "_blank", "noopener,noreferrer");
-    if (popup) {
-      popup.opener = null;
-      return true;
-    }
-  } catch (error) {
-    // Ignore popup blockers and continue with direct navigation.
-  }
-
-  window.location.href = url;
-  return true;
+  const query = text ? `?text=${encodeURIComponent(text)}` : "";
+  return `https://wa.me/${WHATSAPP_NUMBER}${query}`;
 }
 
 function useReveal() {
@@ -224,11 +197,7 @@ function ArtCard({ art, index, onCategoryClick, onImageClick }) {
         <a
           href={buildWhatsAppUrl(waMessage)}
           target="_blank"
-          rel="noreferrer noopener"
-          onClick={(e) => {
-            e.preventDefault();
-            openWhatsApp(waMessage);
-          }}
+          rel="noopener noreferrer"
           className="art-card__quick-wa"
           aria-label={`Consultar por ${art.title} vía WhatsApp`}
         >
@@ -306,13 +275,15 @@ function ChatWidget() {
             o el ambiente que querés decorar, y te ayudamos a elegir la pieza correcta.
           </div>
         </div>
-        <button
+        <a
+          href={buildWhatsAppUrl("Hola! Vi la galería online y quisiera hacer una consulta.")}
+          target="_blank"
+          rel="noopener noreferrer"
           className="chat-widget__cta"
-          onClick={() => openWhatsApp("Hola! Vi la galería online y quisiera hacer una consulta.")}
         >
           <Send size={16} />
           Continuar por WhatsApp
-        </button>
+        </a>
       </div>
 
       <button
@@ -461,6 +432,9 @@ export default function App() {
         }
         .nav__button {
           appearance: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           border: 1px solid rgba(42,40,36,0.2);
           background: rgba(255,255,255,0.35);
           color: var(--graphite);
@@ -473,6 +447,7 @@ export default function App() {
           transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
+          text-decoration: none;
         }
         .nav__button:hover,
         .nav__button:active {
@@ -999,6 +974,7 @@ export default function App() {
           cursor: pointer; transition: background .25s ease;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
+          text-decoration: none;
         }
         .chat-widget__cta:hover { background: #347a4c; }
 
@@ -1065,13 +1041,14 @@ export default function App() {
             >
               Ver galería
             </button>
-            <button
-              type="button"
+            <a
+              href={buildWhatsAppUrl("Hola! Vi la galería online y quiero consultar por las obras disponibles.")}
+              target="_blank"
+              rel="noopener noreferrer"
               className="nav__button nav__button--primary"
-              onClick={() => openWhatsApp("Hola! Vi la galería online y quiero consultar por las obras disponibles.")}
             >
               WhatsApp
-            </button>
+            </a>
           </div>
         </nav>
 
