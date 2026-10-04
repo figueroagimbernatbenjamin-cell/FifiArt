@@ -887,6 +887,7 @@ export default function App() {
           z-index: 40;
           display: flex; flex-direction: column; align-items: flex-end; gap: 14px;
           max-width: calc(100vw - 40px);
+          pointer-events: none;
         }
         @media (max-width: 480px) {
           .chat-widget {
@@ -916,6 +917,7 @@ export default function App() {
           touch-action: manipulation;
           flex-shrink: 0;
           -webkit-tap-highlight-color: transparent;
+          pointer-events: auto;
         }
         .chat-widget__bubble-btn--active { background: var(--graphite); animation: none; }
         .chat-widget__bubble-btn:hover,
