@@ -610,8 +610,10 @@ Error generating stack: `+o.message+`
         }
         @media (max-width: 480px) {
           .chat-widget {
-            right: max(12px, env(safe-area-inset-right));
+            left: max(12px, env(safe-area-inset-left));
+            right: auto;
             bottom: max(12px, env(safe-area-inset-bottom));
+            align-items: flex-start;
           }
           .chat-widget__bubble-btn {
             width: 60px;
@@ -647,6 +649,7 @@ Error generating stack: `+o.message+`
           border-radius: 50%;
           border: 2px solid rgba(61,143,91,0.5);
           animation: pulseRing 2.2s ease-out infinite;
+          pointer-events: none;
         }
         @keyframes pulseRing { 0% { transform: scale(0.85); opacity: 0.8; } 100% { transform: scale(1.5); opacity: 0; } }
 
