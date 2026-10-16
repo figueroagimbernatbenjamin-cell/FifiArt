@@ -54,7 +54,7 @@ const ARTWORKS = [
   { id: 11, title: "Cuadro 11", category: "Abstracto", size: "", price: "Vendido", seed: "cuadro-11", tall: true, image: REAL_ART_IMAGES[11], imagePosition: "50% 40%", sold: true },
   { id: 12, title: "Cuadro 12", category: "Botánico", size: "50x60 cm", previousPrice: "$300.000", price: "$260.000", seed: "cuadro-12", tall: true, image: REAL_ART_IMAGES[12], imagePosition: "50% 50%", sold: false },
   { id: 13, title: "Cuadro 13", category: "Abstracto", size: "50x65 cm", previousPrice: "$230.000", price: "$200.000", seed: "cuadro-13", tall: true, image: REAL_ART_IMAGES[13], imagePosition: "50% 50%", sold: false },
-  { id: 14, title: "Cuadro 14", category: "Abstracto", size: "60x90 cm", previousPrice: "$310.000", price: "$280.000", seed: "cuadro-14", image: REAL_ART_IMAGES[14], imagePosition: "50% 50%", sold: false },
+  { id: 14, title: "Cuadro 14", category: "Abstracto", size: "60x90 cm", previousPrice: "$310.000", price: "$280.000", seed: "cuadro-14", image: REAL_ART_IMAGES[14], imagePosition: "50% 50%", sold: true },
 ];
 
 const WHATSAPP_NUMBER = "5492645059194";
