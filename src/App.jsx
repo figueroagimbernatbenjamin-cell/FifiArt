@@ -342,7 +342,15 @@ export default function App() {
   }, [selectedArtwork]);
 
   const featuredWorks = useMemo(
-    () => ARTWORKS.filter((art) => !art.sold).slice(-3),
+    () =>
+      ARTWORKS.filter((art) => !art.sold)
+        .sort((a, b) => {
+          const priceA = Number(String(a.price).replace(/[^\d]/g, ""));
+          const priceB = Number(String(b.price).replace(/[^\d]/g, ""));
+          return priceB - priceA;
+        })
+        .slice(0, 3)
+        .map((art) => ({ ...art, tall: true })),
     []
   );
 
@@ -569,6 +577,14 @@ export default function App() {
           grid-template-columns: repeat(3, minmax(0, 1fr));
           align-items: start;
           gap: 1rem;
+        }
+        .hero__portfolio .art-card,
+        .hero__portfolio .art-card__media,
+        .hero__portfolio .art-card__frame {
+          width: 100%;
+        }
+        .hero__portfolio .art-card__frame {
+          aspect-ratio: 4 / 5;
         }
         .hero__cta {
           display: inline-flex;
