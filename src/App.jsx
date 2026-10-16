@@ -341,7 +341,10 @@ export default function App() {
     };
   }, [selectedArtwork]);
 
-  const featuredWorks = ARTWORKS.slice(-3);
+  const featuredWorks = useMemo(
+    () => ARTWORKS.filter((art) => !art.sold).slice(-3),
+    []
+  );
 
   const filtered = useMemo(
     () =>
