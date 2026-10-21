@@ -38,6 +38,7 @@ const REAL_ART_IMAGES = {
   12: new URL("../Cuadro 12.JPG", import.meta.url).href,
   13: new URL("../Cuadro 13.JPG", import.meta.url).href,
   14: new URL("../Cuadro 14.JPG", import.meta.url).href,
+  15: new URL("../Cuadro 15.png", import.meta.url).href,
 };
 
 const ARTWORKS = [
@@ -55,6 +56,7 @@ const ARTWORKS = [
   { id: 12, title: "Cuadro 12", category: "Botánico", size: "50x60 cm", previousPrice: "$300.000", price: "$260.000", seed: "cuadro-12", tall: true, image: REAL_ART_IMAGES[12], imagePosition: "50% 50%", sold: false },
   { id: 13, title: "Cuadro 13", category: "Abstracto", size: "50x65 cm", previousPrice: "$230.000", price: "$200.000", seed: "cuadro-13", tall: true, image: REAL_ART_IMAGES[13], imagePosition: "50% 50%", sold: false },
   { id: 14, title: "Cuadro 14", category: "Abstracto", size: "60x90 cm", previousPrice: "$310.000", price: "$280.000", seed: "cuadro-14", image: REAL_ART_IMAGES[14], imagePosition: "50% 50%", sold: true },
+  { id: 15, title: "Cuadro 15", category: "Abstracto", size: "", price: "", seed: "cuadro-15", image: REAL_ART_IMAGES[15], imagePosition: "50% 50%", sold: false },
 ];
 
 const WHATSAPP_NUMBER = "5492645059194";
@@ -146,7 +148,9 @@ function ArtCard({ art, index, onCategoryClick, onImageClick }) {
 
   const waMessage = art.sold
     ? `Hola, me interesa algo parecido al cuadro "${art.title}"${art.size ? ` (${art.size})` : ""}. ¿Podés recomendarme una obra similar o sugerirme alguna opción en ese estilo?`
-    : `Hola, me interesa la obra "${art.title}" (${art.size}). ¿Me pasás precio y disponibilidad?`;
+    : art.size || art.price
+      ? `Hola, me interesa la obra "${art.title}"${art.size ? ` (${art.size})` : ""}. ¿Me pasás precio y disponibilidad?`
+      : `Hola, me interesa la obra "${art.title}". ¿Me pasás más información?`;
 
   return (
     <div
@@ -223,7 +227,7 @@ function ArtCard({ art, index, onCategoryClick, onImageClick }) {
         )}
         {art.sold ? (
           <p className="art-card__price">Vendido</p>
-        ) : (
+        ) : art.price ? (
           <p className="art-card__price">
             {art.previousPrice && (
               <span className="art-card__previous-price">
@@ -232,7 +236,7 @@ function ArtCard({ art, index, onCategoryClick, onImageClick }) {
             )}
             <span className="art-card__current-price">{art.price}</span>
           </p>
-        )}
+        ) : null}
       </div>
     </div>
   );
