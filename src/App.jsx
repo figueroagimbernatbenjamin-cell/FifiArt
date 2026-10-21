@@ -1094,7 +1094,7 @@ export default function App() {
             <button type="button" className="hero__cta" onClick={scrollToGallery}>
               Ver todas las obras <ArrowUpRight size={17} />
             </button>
-            <p className="hero__meta">14 obras originales · piezas disponibles y vendidas</p>
+            <p className="hero__meta">{ARTWORKS.length} obras originales · piezas disponibles y vendidas</p>
           </div>
           {activeCategory === "Todos" && (
             <div className="hero__portfolio" aria-label="Obras destacadas del portfolio">
