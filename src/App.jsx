@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { MessageCircle, X, Send, ArrowUpRight, Ruler } from "lucide-react";
+import { MessageCircle, X, Send, ArrowUpRight, Ruler, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import logoFifi from "./assets/fifi-logo.png";
 import "./App.css";
 import {
@@ -140,6 +140,19 @@ function ArtCard({ art, index, onCategoryClick, onImageClick }) {
             onError={handleImageError}
           />
           <div className="art-card__sheen" style={{ opacity: hovered ? 1 : 0 }} />
+
+          <div className="art-card__badges">
+            {art.sold ? (
+              <span className="art-card__badge art-card__badge--sold">Vendido</span>
+            ) : (
+              <span className="art-card__badge art-card__badge--available">Disponible</span>
+            )}
+          </div>
+
+          <div className="art-card__expand-hint" aria-hidden="true">
+            <Maximize2 size={13} />
+            <span>Ampliar</span>
+          </div>
         </div>
 
         <a
@@ -155,6 +168,7 @@ function ArtCard({ art, index, onCategoryClick, onImageClick }) {
 
       <div className="art-card__info">
         <h3>{art.title}</h3>
+        <p className="art-card__technique">Técnica mixta sobre lienzo</p>
         <button
           type="button"
           className="art-card__category"
@@ -276,25 +290,6 @@ export default function App() {
     return () => clearTimeout(t);
   }, []);
 
-  useEffect(() => {
-    if (!selectedArtwork) return;
-
-    const previousOverflow = document.body.style.overflow;
-    const previouslyFocused = document.activeElement;
-    document.body.style.overflow = "hidden";
-    zoomCloseRef.current?.focus();
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") setSelectedArtwork(null);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [selectedArtwork]);
-
   const featuredWorks = useMemo(
     () =>
       ARTWORKS.filter((art) => !art.sold)
@@ -318,6 +313,77 @@ export default function App() {
       }),
     [activeCategory, onlyAvailable]
   );
+
+  const activeGalleryList = useMemo(() => {
+    return filtered.length > 0 ? filtered : ARTWORKS;
+  }, [filtered]);
+
+  const currentIndex = useMemo(() => {
+    if (!selectedArtwork) return -1;
+    const idx = activeGalleryList.findIndex((a) => a.id === selectedArtwork.id);
+    return idx !== -1 ? idx : ARTWORKS.findIndex((a) => a.id === selectedArtwork.id);
+  }, [selectedArtwork, activeGalleryList]);
+
+  const handlePrev = useCallback(() => {
+    if (!selectedArtwork) return;
+    const idx = activeGalleryList.findIndex((a) => a.id === selectedArtwork.id);
+    const prevIdx = idx > 0 ? idx - 1 : activeGalleryList.length - 1;
+    setSelectedArtwork(activeGalleryList[prevIdx]);
+  }, [selectedArtwork, activeGalleryList]);
+
+  const handleNext = useCallback(() => {
+    if (!selectedArtwork) return;
+    const idx = activeGalleryList.findIndex((a) => a.id === selectedArtwork.id);
+    const nextIdx = idx < activeGalleryList.length - 1 ? idx + 1 : 0;
+    setSelectedArtwork(activeGalleryList[nextIdx]);
+  }, [selectedArtwork, activeGalleryList]);
+
+  useEffect(() => {
+    if (!selectedArtwork) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previouslyFocused = document.activeElement;
+    document.body.style.overflow = "hidden";
+    zoomCloseRef.current?.focus();
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setSelectedArtwork(null);
+      if (event.key === "ArrowLeft") handlePrev();
+      if (event.key === "ArrowRight") handleNext();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    let startX = 0;
+    const handleTouchStart = (e) => {
+      startX = e.touches[0].clientX;
+    };
+    const handleTouchEnd = (e) => {
+      const endX = e.changedTouches[0].clientX;
+      const diff = endX - startX;
+      if (diff > 50) handlePrev();
+      else if (diff < -50) handleNext();
+    };
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [selectedArtwork, handlePrev, handleNext]);
+
+  const modalWaMessage = useMemo(() => {
+    if (!selectedArtwork) return "";
+    if (selectedArtwork.sold) {
+      return `Hola! Me encantó la obra "${selectedArtwork.title}" (${selectedArtwork.category}). Como figura vendida, ¿podrías asesorarme para un encargo similar?`;
+    }
+    return selectedArtwork.size || selectedArtwork.price
+      ? `Hola! Estoy interesado/a en adquirir la obra "${selectedArtwork.title}" (${selectedArtwork.size || selectedArtwork.category}). ¿Podrías brindarme más detalles para coordinar compra y envío?`
+      : `Hola! Me interesa la obra "${selectedArtwork.title}". ¿Podrías brindarme más información sobre disponibilidad y medidas?`;
+  }, [selectedArtwork]);
 
   const handleCategoryClick = useCallback((category) => setActiveCategory(category), []);
   const handleImageClick = useCallback((art) => setSelectedArtwork(art), []);
@@ -465,6 +531,31 @@ export default function App() {
           role="presentation"
           onClick={() => setSelectedArtwork(null)}
         >
+          {/* Navigation Arrows */}
+          <button
+            type="button"
+            className="artwork-zoom__nav artwork-zoom__nav--prev"
+            onClick={(e) => {
+              e.stopPropagation();
+              handlePrev();
+            }}
+            aria-label="Obra anterior (Flecha izquierda)"
+          >
+            <ChevronLeft size={28} />
+          </button>
+
+          <button
+            type="button"
+            className="artwork-zoom__nav artwork-zoom__nav--next"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNext();
+            }}
+            aria-label="Obra siguiente (Flecha derecha)"
+          >
+            <ChevronRight size={28} />
+          </button>
+
           <div
             className="artwork-zoom__panel"
             role="dialog"
@@ -481,14 +572,59 @@ export default function App() {
             >
               <X size={19} />
             </button>
-            <img
-              className="artwork-zoom__image"
-              src={selectedArtwork.image || placeholderArt(selectedArtwork.seed, 700, selectedArtwork.tall ? 900 : 700)}
-              alt={selectedArtwork.title}
-              decoding="async"
-              style={{ objectPosition: selectedArtwork.imagePosition || "center center" }}
-            />
-            <p className="artwork-zoom__caption">{selectedArtwork.title}</p>
+
+            <div className="artwork-zoom__image-wrap">
+              <img
+                className="artwork-zoom__image"
+                src={selectedArtwork.image || placeholderArt(selectedArtwork.seed, 700, selectedArtwork.tall ? 900 : 700)}
+                alt={selectedArtwork.title}
+                decoding="async"
+                style={{ objectPosition: selectedArtwork.imagePosition || "center center" }}
+              />
+            </div>
+
+            <div className="artwork-zoom__details">
+              <div className="artwork-zoom__info">
+                <div className="artwork-zoom__tags">
+                  <span className="artwork-zoom__counter">
+                    {currentIndex + 1} de {activeGalleryList.length}
+                  </span>
+                  <span className="artwork-zoom__category">{selectedArtwork.category}</span>
+                  {selectedArtwork.sold ? (
+                    <span className="artwork-zoom__badge artwork-zoom__badge--sold">Vendido</span>
+                  ) : (
+                    <span className="artwork-zoom__badge artwork-zoom__badge--available">Disponible</span>
+                  )}
+                </div>
+
+                <h2 className="artwork-zoom__title">{selectedArtwork.title}</h2>
+                <p className="artwork-zoom__desc">
+                  {selectedArtwork.size ? `Medidas: ${selectedArtwork.size}` : "Medidas a consultar"} · Técnica mixta sobre lienzo
+                </p>
+              </div>
+
+              <div className="artwork-zoom__cta-group">
+                {selectedArtwork.price && !selectedArtwork.sold && (
+                  <div className="artwork-zoom__price">
+                    {selectedArtwork.previousPrice && (
+                      <span className="artwork-zoom__price-prev">
+                        Antes: <del>{selectedArtwork.previousPrice}</del>
+                      </span>
+                    )}
+                    <span className="artwork-zoom__price-curr">{selectedArtwork.price}</span>
+                  </div>
+                )}
+                <a
+                  href={buildWhatsAppUrl(modalWaMessage)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="artwork-zoom__wa-btn"
+                >
+                  <WhatsAppIcon size={18} />
+                  {selectedArtwork.sold ? "Consultar por encargo similar" : "Consultar por esta obra"}
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       )}

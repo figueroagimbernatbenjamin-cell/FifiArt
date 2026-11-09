@@ -398,6 +398,76 @@
           transform: scale(1.04);
         }
         .art-card__frame:hover .art-card__img--loaded { transform: scale(1.12); }
+
+        .art-card__badges {
+          position: absolute;
+          top: 16px;
+          left: 16px;
+          z-index: 2;
+          display: flex;
+          gap: 6px;
+          pointer-events: none;
+        }
+        .art-card__badge {
+          display: inline-flex;
+          align-items: center;
+          padding: 3px 8px;
+          border-radius: 999px;
+          font-family: 'Work Sans', sans-serif;
+          font-size: 0.72rem;
+          font-weight: 500;
+          letter-spacing: 0.02em;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
+        .art-card__badge--available {
+          background: rgba(255,253,249,0.92);
+          color: #1b4332;
+          border: 1px solid rgba(34,197,94,0.3);
+        }
+        .art-card__badge--sold {
+          background: rgba(42,40,36,0.85);
+          color: #f3ede3;
+          border: 1px solid rgba(255,255,255,0.18);
+        }
+        .art-card__expand-hint {
+          position: absolute;
+          bottom: 16px;
+          left: 16px;
+          z-index: 2;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 4px 9px;
+          border-radius: 999px;
+          background: rgba(255,253,249,0.9);
+          color: var(--graphite);
+          font-size: 0.72rem;
+          font-weight: 500;
+          opacity: 0;
+          transform: translateY(4px);
+          transition: opacity .25s ease, transform .25s ease;
+          pointer-events: none;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        .art-card__frame:hover .art-card__expand-hint {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+          .art-card__expand-hint {
+            opacity: 0.85;
+            transform: translateY(0);
+          }
+        }
+        .art-card__technique {
+          font-size: 0.76rem;
+          color: #8c8275;
+          margin: 0.15rem 0 0.3rem;
+          font-style: italic;
+        }
+
         .artwork-zoom {
           --graphite: #2a2824;
           position: fixed;
@@ -406,48 +476,226 @@
           display: grid;
           place-items: center;
           padding: 24px;
-          background: rgba(30,29,27,0.36);
-          -webkit-backdrop-filter: blur(12px) saturate(0.82);
-          backdrop-filter: blur(12px) saturate(0.82);
+          background: rgba(20,19,17,0.65);
+          -webkit-backdrop-filter: blur(14px) saturate(0.85);
+          backdrop-filter: blur(14px) saturate(0.85);
           animation: artworkZoomBackdrop .28s ease both;
         }
         .artwork-zoom__panel {
           position: relative;
           width: fit-content;
-          max-width: min(88vw, 720px);
-          max-height: 88vh;
-          padding: 12px;
-          border: 1px solid rgba(255,255,255,0.62);
-          border-radius: 22px;
-          background: rgba(255,253,249,0.94);
-          box-shadow: 0 32px 100px rgba(25,23,20,0.3), 0 8px 24px rgba(25,23,20,0.12);
-          animation: artworkZoomIn .42s cubic-bezier(.22,1,.36,1) both;
+          max-width: min(92vw, 840px);
+          max-height: 92vh;
+          padding: 16px;
+          border: 1px solid rgba(255,255,255,0.7);
+          border-radius: 24px;
+          background: rgba(255,253,249,0.96);
+          box-shadow: 0 32px 100px rgba(20,18,16,0.4), 0 8px 24px rgba(20,18,16,0.15);
+          animation: artworkZoomIn .38s cubic-bezier(.22,1,.36,1) both;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+        .artwork-zoom__nav {
+          position: fixed;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 105;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,0.6);
+          background: rgba(255,253,249,0.92);
+          color: var(--graphite);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+          transition: transform .2s ease, background .2s ease;
+          touch-action: manipulation;
+        }
+        .artwork-zoom__nav:hover {
+          transform: translateY(-50%) scale(1.08);
+          background: #ffffff;
+        }
+        .artwork-zoom__nav:active {
+          transform: translateY(-50%) scale(0.96);
+        }
+        .artwork-zoom__nav--prev {
+          left: 20px;
+        }
+        .artwork-zoom__nav--next {
+          right: 20px;
+        }
+        @media (max-width: 768px) {
+          .artwork-zoom__nav {
+            width: 40px;
+            height: 40px;
+          }
+          .artwork-zoom__nav--prev { left: 8px; }
+          .artwork-zoom__nav--next { right: 8px; }
+        }
+        .artwork-zoom__image-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          border-radius: 16px;
+          background: #eee8de;
         }
         .artwork-zoom__image {
           display: block;
-          width: min(82vw, 640px);
-          height: min(78vh, 800px);
+          max-width: min(84vw, 760px);
+          max-height: min(60vh, 600px);
+          width: auto;
+          height: auto;
           object-fit: contain;
-          object-position: center;
           border-radius: 14px;
-          background: #eee8de;
         }
-        .artwork-zoom__caption {
-          margin: 11px 42px 1px 3px;
+        .artwork-zoom__details {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1.5rem;
+          margin-top: 14px;
+          padding: 8px 6px 4px;
+          border-top: 1px solid rgba(42,40,36,0.08);
+        }
+        .artwork-zoom__info {
+          flex: 1;
+          min-width: 0;
+        }
+        .artwork-zoom__tags {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 4px;
+          flex-wrap: wrap;
+        }
+        .artwork-zoom__counter {
+          font-size: 0.76rem;
+          color: #8c8275;
+          font-weight: 500;
+        }
+        .artwork-zoom__category {
+          font-size: 0.76rem;
+          color: var(--sage);
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+        }
+        .artwork-zoom__badge {
+          font-size: 0.72rem;
+          font-weight: 600;
+          padding: 2px 7px;
+          border-radius: 999px;
+        }
+        .artwork-zoom__badge--available {
+          background: rgba(34,197,94,0.14);
+          color: #166534;
+        }
+        .artwork-zoom__badge--sold {
+          background: rgba(42,40,36,0.1);
+          color: #57534e;
+        }
+        .artwork-zoom__title {
+          font-family: 'Fraunces', serif;
+          font-size: 1.35rem;
+          font-weight: 500;
+          margin: 0;
           color: var(--graphite);
-          font: 500 0.9rem 'Work Sans', sans-serif;
+        }
+        .artwork-zoom__desc {
+          margin: 3px 0 0;
+          font-size: 0.82rem;
+          color: #6b675d;
+        }
+        .artwork-zoom__cta-group {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          flex-shrink: 0;
+        }
+        .artwork-zoom__price {
+          text-align: right;
+        }
+        .artwork-zoom__price-prev {
+          display: block;
+          font-size: 0.78rem;
+          color: #8c8275;
+        }
+        .artwork-zoom__price-curr {
+          font-size: 1.15rem;
+          font-weight: 600;
+          color: var(--ochre);
+        }
+        .artwork-zoom__wa-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 0.65rem 1.25rem;
+          border-radius: 999px;
+          background: #25d366;
+          color: #ffffff;
+          font-family: 'Work Sans', sans-serif;
+          font-size: 0.88rem;
+          font-weight: 500;
+          text-decoration: none;
+          box-shadow: 0 4px 14px rgba(37,211,102,0.35);
+          transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+          touch-action: manipulation;
+        }
+        .artwork-zoom__wa-btn:hover {
+          background: #20ba5a;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 18px rgba(37,211,102,0.45);
+        }
+        @media (max-width: 680px) {
+          .artwork-zoom { padding: 12px; }
+          .artwork-zoom__panel {
+            max-width: 94vw;
+            max-height: 94vh;
+            padding: 10px;
+            border-radius: 18px;
+          }
+          .artwork-zoom__image {
+            max-width: 88vw;
+            max-height: 50vh;
+          }
+          .artwork-zoom__details {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+            margin-top: 10px;
+            padding-top: 8px;
+          }
+          .artwork-zoom__cta-group {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .artwork-zoom__title {
+            font-size: 1.15rem;
+          }
+          .artwork-zoom__wa-btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.82rem;
+            flex: 1;
+            justify-content: center;
+          }
         }
         .artwork-zoom__close {
           position: absolute;
-          top: 18px;
-          right: 18px;
-          z-index: 1;
+          top: 14px;
+          right: 14px;
+          z-index: 10;
           display: grid;
           place-items: center;
-          width: 38px;
-          height: 38px;
+          width: 36px;
+          height: 36px;
           padding: 0;
-          border: 1px solid rgba(42,40,36,0.08);
+          border: 1px solid rgba(42,40,36,0.1);
           border-radius: 50%;
           background: rgba(255,253,249,0.92);
           color: var(--graphite);
