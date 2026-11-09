@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cp index.template.html index.html && vite --host",
     "prebuild": "cp index.template.html index.html",
-    "build": "vite build && cp dist/index.html index.html && rsync -a --delete dist/assets/ assets/",
+    "build": "vite build && cp dist/index.html index.html && rsync -a --delete dist/assets/ assets/ && cp -f dist/og-cover.jpg ./ && cp -f dist/favicon.png ./",
     "preview": "vite preview --host"
   },
   "dependencies": {
