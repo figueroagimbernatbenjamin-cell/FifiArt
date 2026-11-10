@@ -457,8 +457,23 @@
         }
         @media (max-width: 600px) {
           .art-card__expand-hint {
-            opacity: 0.85;
+            opacity: 0.9;
             transform: translateY(0);
+            padding: 5px;
+            border-radius: 50%;
+            bottom: 12px;
+            left: 12px;
+          }
+          .art-card__expand-hint span {
+            display: none;
+          }
+          .art-card__badges {
+            top: 12px;
+            left: 12px;
+          }
+          .art-card__badge {
+            font-size: 0.68rem;
+            padding: 2px 7px;
           }
         }
         .art-card__technique {
@@ -652,35 +667,49 @@
           box-shadow: 0 6px 18px rgba(37,211,102,0.45);
         }
         @media (max-width: 680px) {
-          .artwork-zoom { padding: 12px; }
+          .artwork-zoom { padding: 8px; }
           .artwork-zoom__panel {
-            max-width: 94vw;
+            max-width: 95vw;
             max-height: 94vh;
             padding: 10px;
             border-radius: 18px;
+            overflow-y: auto;
           }
+          .artwork-zoom__nav {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,253,249,0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+          }
+          .artwork-zoom__nav--prev { left: 4px; }
+          .artwork-zoom__nav--next { right: 4px; }
           .artwork-zoom__image {
             max-width: 88vw;
-            max-height: 50vh;
+            max-height: 46vh;
           }
           .artwork-zoom__details {
             flex-direction: column;
             align-items: stretch;
-            gap: 0.75rem;
-            margin-top: 10px;
+            gap: 0.6rem;
+            margin-top: 8px;
             padding-top: 8px;
           }
           .artwork-zoom__cta-group {
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
+            gap: 0.75rem;
           }
           .artwork-zoom__title {
-            font-size: 1.15rem;
+            font-size: 1.12rem;
+          }
+          .artwork-zoom__desc {
+            font-size: 0.76rem;
           }
           .artwork-zoom__wa-btn {
-            padding: 0.6rem 1rem;
-            font-size: 0.82rem;
+            padding: 0.55rem 0.9rem;
+            font-size: 0.8rem;
             flex: 1;
             justify-content: center;
           }
@@ -715,22 +744,7 @@
           from { opacity: 0; transform: translateY(12px) scale(0.96); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @media (max-width: 600px) {
-          .artwork-zoom { padding: 16px; }
-          .artwork-zoom__panel {
-            max-width: 90vw;
-            max-height: 86vh;
-            padding: 9px;
-            border-radius: 18px;
-          }
-          .artwork-zoom__image {
-            width: min(86vw, 520px);
-            height: min(72vh, 660px);
-            border-radius: 12px;
-          }
-          .artwork-zoom__close { top: 13px; right: 13px; width: 36px; height: 36px; }
-          .artwork-zoom__caption { margin-top: 9px; font-size: 0.84rem; }
-        }
+
         .art-card__sheen {
           position: absolute; inset: 0;
           background: linear-gradient(135deg, rgba(255,255,255,0.16), transparent 55%);
