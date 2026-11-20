@@ -302,6 +302,7 @@ export default function App() {
   const [onlyAvailable, setOnlyAvailable] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [selectedArtwork, setSelectedArtwork] = useState(null);
+  const [slideDir, setSlideDir] = useState(null);
   const zoomCloseRef = useRef(null);
 
   const availableCount = useMemo(
@@ -356,6 +357,7 @@ export default function App() {
     if (!selectedArtwork) return;
     const idx = activeGalleryList.findIndex((a) => a.id === selectedArtwork.id);
     const prevIdx = idx > 0 ? idx - 1 : activeGalleryList.length - 1;
+    setSlideDir("prev");
     setSelectedArtwork(activeGalleryList[prevIdx]);
   }, [selectedArtwork, activeGalleryList]);
 
@@ -363,6 +365,7 @@ export default function App() {
     if (!selectedArtwork) return;
     const idx = activeGalleryList.findIndex((a) => a.id === selectedArtwork.id);
     const nextIdx = idx < activeGalleryList.length - 1 ? idx + 1 : 0;
+    setSlideDir("next");
     setSelectedArtwork(activeGalleryList[nextIdx]);
   }, [selectedArtwork, activeGalleryList]);
 
@@ -414,7 +417,10 @@ export default function App() {
   }, [selectedArtwork]);
 
   const handleCategoryClick = useCallback((category) => setActiveCategory(category), []);
-  const handleImageClick = useCallback((art) => setSelectedArtwork(art), []);
+  const handleImageClick = useCallback((art) => {
+    setSlideDir(null);
+    setSelectedArtwork(art);
+  }, []);
 
   const scrollToGallery = useCallback(() => {
     const gallery = document.getElementById("galeria");
@@ -603,16 +609,21 @@ export default function App() {
             </button>
 
             <div className="artwork-zoom__image-wrap">
-              <img
-                className="artwork-zoom__image"
-                src={selectedArtwork.image || placeholderArt(selectedArtwork.seed, 700, selectedArtwork.tall ? 900 : 700)}
-                alt={selectedArtwork.title}
-                decoding="async"
-                style={{ objectPosition: selectedArtwork.imagePosition || "center center" }}
-              />
+              <div
+                key={selectedArtwork.id}
+                className={`artwork-zoom__slide ${slideDir ? `artwork-zoom__slide--${slideDir}` : "artwork-zoom__slide--fade"}`}
+              >
+                <img
+                  className="artwork-zoom__image"
+                  src={selectedArtwork.image || placeholderArt(selectedArtwork.seed, 700, selectedArtwork.tall ? 900 : 700)}
+                  alt={selectedArtwork.title}
+                  decoding="async"
+                  style={{ objectPosition: selectedArtwork.imagePosition || "center center" }}
+                />
+              </div>
             </div>
 
-            <div className="artwork-zoom__details">
+            <div key={`details-${selectedArtwork.id}`} className="artwork-zoom__details">
               <div className="artwork-zoom__info">
                 <div className="artwork-zoom__tags">
                   <span className="artwork-zoom__counter">
