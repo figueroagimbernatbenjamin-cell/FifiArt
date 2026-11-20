@@ -44,12 +44,37 @@ function useReveal() {
   return [ref, visible];
 }
 
-function ArtCard({ art, index, onCategoryClick, onImageClick }) {
+function ArtCard({ art, index, onCategoryClick, onImageClick, priority = false }) {
+  const containerRef = useRef(null);
   const cardRef = useRef(null);
+  const [visible, setVisible] = useState(priority);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
   const [hovered, setHovered] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
+
+  useEffect(() => {
+    if (visible) return;
+    const node = containerRef.current;
+    if (!node) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return;
+    }
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.08, rootMargin: "40px 0px -5% 0px" }
+    );
+    obs.observe(node);
+    return () => obs.disconnect();
+  }, [visible]);
 
   const applyTiltFromPoint = useCallback((clientX, clientY) => {
     const node = cardRef.current;
@@ -97,8 +122,9 @@ function ArtCard({ art, index, onCategoryClick, onImageClick }) {
 
   return (
     <div
-      className={`art-card ${art.tall ? "art-card--tall" : ""}`}
-      style={{ animationDelay: `${(index % 6) * 90}ms` }}
+      ref={containerRef}
+      className={`art-card ${art.tall ? "art-card--tall" : ""} ${visible ? "art-card--visible" : ""}`}
+      style={{ transitionDelay: `${(index % 4) * 90}ms` }}
     >
       <div className="art-card__media">
         <div
@@ -129,16 +155,18 @@ function ArtCard({ art, index, onCategoryClick, onImageClick }) {
             src={art.image || fallbackArt}
             alt={art.title}
             className={`art-card__img ${imgLoaded ? "art-card__img--loaded" : ""}`}
-            loading="lazy"
+            loading={priority ? "eager" : "lazy"}
+            fetchpriority={priority ? "high" : "auto"}
             decoding="async"
             style={{
               objectFit: "cover",
               objectPosition: art.imagePosition || "center center",
-              background: "#efe9df",
+              background: "transparent",
             }}
             onLoad={() => setImgLoaded(true)}
             onError={handleImageError}
           />
+          <div className={`art-card__skeleton ${imgLoaded ? "art-card__skeleton--hidden" : ""}`} aria-hidden="true" />
           <div className="art-card__sheen" style={{ opacity: hovered ? 1 : 0 }} />
 
           <div className="art-card__badges">
@@ -455,6 +483,7 @@ export default function App() {
                   index={index}
                   onCategoryClick={handleCategoryClick}
                   onImageClick={handleImageClick}
+                  priority={index < 3}
                 />
               ))}
             </div>
